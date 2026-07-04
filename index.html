@@ -349,7 +349,8 @@
         }
         localStorage.setItem("examResultsData_v3", JSON.stringify(allData));
     }
-
+// ဒီကုဒ်ကို JavaScript ရဲ့ အောက်ဆုံးမှာ ထည့်ပါ
+location.reload();
     function getExamData(year, classId, exam) { ensureYearData(year); return allData[year][classId][exam]; }
     function saveExamData(year, classId, exam, data) { allData[year][classId][exam] = data; localStorage.setItem("examResultsData_v3", JSON.stringify(allData)); }
 
