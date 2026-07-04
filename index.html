@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန် - Madrasah Taleemul Quran</title>
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Noto+Sans+Myanmar:wght@400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        /* ===== ROOT VARIABLES ===== */
         :root {
             --primary-color: #1e4620;
             --secondary-color: #2c5f2d;
@@ -15,9 +19,18 @@
             --bg-color: #fef8e7;
             --card-bg: rgba(255, 255, 245, 0.96);
             --text-color: #2c2b28;
+            --border-radius-lg: 2rem;
+            --border-radius-sm: 1rem;
+            --shadow-soft: 0 15px 30px rgba(0, 0, 0, 0.08);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Padauk', 'Noto Sans Myanmar', sans-serif;
             background: var(--bg-color);
@@ -25,436 +38,1147 @@
             line-height: 1.6;
             padding: 18px;
             position: relative;
+            min-height: 100vh;
         }
 
-        /* Arabic Border Decoration */
+        /* Arabic Decorative Background */
         body::before {
             content: "";
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' opacity='0.12'%3E%3Cpath fill='%232c5f2d' d='M100 30L120 55H80L100 30zM70 60h60v10H70zM55 80h90v5H55zM40 100h120v8H40zM30 120h140v4H30zM20 140h160v4H20zM90 150h20v30H90zM110 150h20v30h-20z'/%3E%3Ccircle cx='100' cy='150' r='12' fill='%232c5f2d'/%3E%3C/svg%3E");
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' opacity='0.10'%3E%3Cpath fill='%232c5f2d' d='M100 30L120 55H80L100 30zM70 60h60v10H70zM55 80h90v5H55zM40 100h120v8H40zM30 120h140v4H30zM20 140h160v4H20zM90 150h20v30H90zM110 150h20v30h-20z'/%3E%3Ccircle cx='100' cy='150' r='12' fill='%232c5f2d'/%3E%3C/svg%3E");
             background-repeat: repeat;
             background-size: 80px;
             pointer-events: none;
             z-index: -1;
         }
 
-        .main-content { padding: 1rem; position: relative; z-index: 5; max-width: 1200px; margin: 0 auto; }
+        /* ===== LAYOUT ===== */
+        .main-content {
+            padding: 1rem;
+            position: relative;
+            z-index: 5;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         .section-card {
             background: var(--card-bg);
-            border-radius: 2rem;
+            border-radius: var(--border-radius-lg);
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: var(--shadow-soft);
             border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: box-shadow 0.25s ease;
+        }
+        .section-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.10);
         }
 
-        .navbar { 
-            background: var(--primary-color) !important; 
-            border-bottom: 2px solid var(--accent-color); 
-            border-radius: 50px; 
-            margin-bottom: 1.5rem; 
-            padding: 0.8rem 1.5rem;
+        /* ===== NAVBAR ===== */
+        .navbar-custom {
+            background: var(--primary-color) !important;
+            border-bottom: 2px solid var(--accent-color);
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            padding: 0.7rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
-        .navbar-brand { color: #fff !important; font-weight: bold; }
-        .nav-link { color: rgba(255,255,255,0.8) !important; }
-        .nav-link:hover { color: #fff !important; }
+        .navbar-custom .navbar-brand {
+            color: #fff !important;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .navbar-custom .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #fff !important;
+        }
 
+        /* ===== HERO ===== */
         .hero {
-            background: linear-gradient(135deg, rgba(44,95,45,0.1), rgba(249,241,207,0.5));
-            border-radius: 2.5rem;
+            background: linear-gradient(135deg, rgba(44, 95, 45, 0.08), rgba(249, 241, 207, 0.5));
+            border-radius: var(--border-radius-lg);
             padding: 3rem 1.5rem;
             text-align: center;
             border: 1px solid var(--accent-color);
             margin-bottom: 2rem;
         }
-        .arabic-hero { font-family: 'Amiri', serif; font-size: 1.8rem; color: #b8860b; }
+        .arabic-hero {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            color: #b8860b;
+        }
 
-        /* Exam Result Tabs */
-        .nav-tabs-custom { display: flex; border-bottom: 2px solid var(--secondary-color); margin-bottom: 1.5rem; padding: 0; list-style: none; }
+        /* ===== EXAM TABS ===== */
+        .nav-tabs-custom {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--secondary-color);
+            margin-bottom: 1.5rem;
+            padding: 0;
+            list-style: none;
+            gap: 4px;
+        }
         .exam-tab {
-            padding: 10px 20px;
+            padding: 10px 22px;
             cursor: pointer;
             background: #e8f5e9;
             border: 2px solid var(--secondary-color);
             border-bottom: none;
-            border-radius: 1rem 1rem 0 0;
-            margin-right: 5px;
-            font-weight: bold;
+            border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+            font-weight: 700;
             color: var(--secondary-color);
-            transition: all 0.3s;
+            transition: all 0.25s;
+            font-size: 1rem;
+            margin-right: 4px;
         }
-        .exam-tab.active { background: var(--secondary-color); color: white; }
-        .exam-badge { display: inline-block; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; margin-left: 5px; }
-        .badge-first { background: #ffd700; color: #000; }
-        .badge-second { background: #c0c0c0; color: #000; }
-        .badge-third { background: #cd7f32; color: #fff; }
+        .exam-tab:hover {
+            background: #d4edda;
+        }
+        .exam-tab.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        .exam-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-left: 6px;
+            font-weight: 700;
+        }
+        .badge-first {
+            background: #ffd700;
+            color: #000;
+        }
+        .badge-second {
+            background: #c0c0c0;
+            color: #000;
+        }
+        .badge-third {
+            background: #cd7f32;
+            color: #fff;
+        }
 
-        /* Table Styles */
-        .table { background: white; border-radius: 0.5rem; overflow: hidden; }
-        .table th { background: var(--secondary-color) !important; color: white !important; text-align: center; vertical-align: middle; }
-        .table td { vertical-align: middle; text-align: center; }
-        .mark-input { width: 70px; text-align: center; margin: 0 auto; }
-        .student-name-input { min-width: 180px; text-align: left; }
-        .total-cell { font-weight: bold; background: #fff8e1; }
-        .rank-cell { font-weight: bold; color: var(--primary-color); }
+        /* ===== TABLES ===== */
+        .table-wrap {
+            background: white;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            padding: 0.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .table {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+        .table thead th {
+            background: var(--secondary-color) !important;
+            color: white !important;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+            padding: 10px 8px;
+            font-weight: 600;
+        }
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 6px 4px;
+        }
+        .student-name-input {
+            min-width: 160px;
+            text-align: left;
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background: #fafafa;
+            transition: border 0.2s;
+        }
+        .student-name-input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            background: #fff;
+        }
+        .mark-input {
+            width: 68px;
+            text-align: center;
+            font-size: 0.9rem;
+            padding: 4px 2px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background: #fafafa;
+            transition: border 0.2s;
+        }
+        .mark-input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            background: #fff;
+        }
+        .mark-input:disabled {
+            background: #f1f3f5;
+            cursor: not-allowed;
+        }
+        .student-name-input:disabled {
+            background: #f1f3f5;
+            cursor: not-allowed;
+        }
+        .total-cell {
+            font-weight: 700;
+            background: #fff8e1 !important;
+            color: #1e4620;
+        }
+        .rank-cell {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.05rem;
+        }
 
-        /* Print Area */
-        #printArea { display: none; }
+        /* ===== ADMIN BAR ===== */
+        .admin-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 0.75rem 1.2rem;
+            margin-bottom: 1.2rem;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid #e0e7e0;
+        }
+        .admin-bar .label-sm {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 2px;
+        }
+        .admin-bar select {
+            font-size: 0.9rem;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            background: white;
+            min-width: 120px;
+        }
+        .admin-bar select:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+
+        /* ===== SUBJECTS LIST ===== */
+        .subject-list-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid #f0eee6;
+            transition: background 0.15s;
+        }
+        .subject-list-item:hover {
+            background: #f8f6ef;
+        }
+        .subject-list-item i {
+            color: var(--secondary-color);
+            font-size: 1rem;
+            width: 1.4rem;
+            text-align: center;
+        }
+
+        /* ===== ENROLL FORM ===== */
+        .enroll-form .form-control,
+        .enroll-form .form-select {
+            border-radius: 10px;
+            border: 1px solid #d0d7d0;
+            padding: 0.6rem 1rem;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        .enroll-form .form-control:focus,
+        .enroll-form .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.15);
+        }
+        .btn-success-custom {
+            background: var(--secondary-color);
+            border: none;
+            padding: 0.6rem 2.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: background 0.2s, transform 0.1s;
+            color: #fff;
+        }
+        .btn-success-custom:hover {
+            background: #1e4620;
+            transform: scale(1.02);
+        }
+        .btn-success-custom:active {
+            transform: scale(0.97);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 1.5rem 0 0.5rem;
+            color: #6c6a64;
+            font-size: 0.95rem;
+            border-top: 1px solid #e8e3d6;
+            margin-top: 2rem;
+        }
+
+        /* ===== PRINT STYLES ===== */
+        #printArea {
+            display: none;
+        }
 
         @media print {
-            body { padding: 0; margin: 0; background: white; }
-            .no-print, .navbar, .hero, #subjects, #enroll, #contact, footer, .nav-tabs-custom { display: none !important; }
-            #printArea { display: block !important; width: 100%; }
-            .section-card { border: none; box-shadow: none; padding: 0; margin: 0; background: white; }
-            @page { size: A4 landscape; margin: 1cm; }
-            .print-header { text-align: center; border-bottom: 2px solid black; margin-bottom: 20px; padding-bottom: 10px; }
-            .print-header h2 { margin: 0; font-size: 18pt; }
-            .exam-results-print { page-break-after: always; }
-            .exam-results-print:last-child { page-break-after: auto; }
-            .exam-title-print { font-size: 14pt; font-weight: bold; text-align: center; margin: 15px 0; text-decoration: underline; }
-            .table { font-size: 9pt; width: 100%; border-collapse: collapse; }
-            .table th, .table td { border: 1px solid black !important; padding: 4px; color: black !important; }
-            .table thead th { background-color: #eee !important; color: black !important; }
+            body {
+                padding: 0;
+                margin: 0;
+                background: white !important;
+            }
+            .no-print,
+            .navbar-custom,
+            .hero,
+            #subjects,
+            #enroll,
+            footer,
+            .nav-tabs-custom,
+            .admin-bar,
+            .btn,
+            .exam-badge {
+                display: none !important;
+            }
+            #printArea {
+                display: block !important;
+                width: 100%;
+                padding: 0.5cm;
+            }
+            .section-card {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+                border-radius: 0 !important;
+            }
+            @page {
+                size: A4 landscape;
+                margin: 1.2cm 0.8cm;
+            }
+            .print-header {
+                text-align: center;
+                border-bottom: 2px solid #000;
+                margin-bottom: 18px;
+                padding-bottom: 10px;
+            }
+            .print-header h2 {
+                margin: 0;
+                font-size: 18pt;
+                font-weight: 700;
+            }
+            .print-header p {
+                margin: 2px 0;
+                font-size: 10pt;
+            }
+            .print-header h5 {
+                margin: 6px 0 0;
+                font-size: 13pt;
+                font-weight: 600;
+            }
+            .exam-results-print {
+                page-break-after: always;
+            }
+            .exam-results-print:last-child {
+                page-break-after: auto;
+            }
+            .exam-title-print {
+                font-size: 13pt;
+                font-weight: 700;
+                text-align: center;
+                margin: 12px 0 8px;
+                text-decoration: underline;
+            }
+            .table {
+                font-size: 8.5pt;
+                width: 100%;
+                border-collapse: collapse;
+                background: white !important;
+            }
+            .table th,
+            .table td {
+                border: 1px solid #000 !important;
+                padding: 3px 5px;
+                color: #000 !important;
+                background: white !important;
+                text-align: center;
+            }
+            .table thead th {
+                background: #eee !important;
+                color: #000 !important;
+                font-weight: 700;
+            }
+            .table td input {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                text-align: center;
+                font-size: 8.5pt;
+                width: auto !important;
+                min-width: 0 !important;
+            }
+            .total-cell,
+            .rank-cell {
+                background: white !important;
+                color: #000 !important;
+            }
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .navbar { border-radius: 20px; }
-            .main-content { padding: 0.5rem; }
-            .section-card { padding: 1.2rem; }
-            .exam-tab { padding: 8px 10px; font-size: 0.8rem; }
+            body {
+                padding: 10px;
+            }
+            .navbar-custom {
+                border-radius: 24px;
+                padding: 0.5rem 1rem;
+            }
+            .main-content {
+                padding: 0.25rem;
+            }
+            .section-card {
+                padding: 1.2rem;
+                border-radius: 1.5rem;
+            }
+            .exam-tab {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            .student-name-input {
+                min-width: 100px;
+                font-size: 0.8rem;
+            }
+            .mark-input {
+                width: 52px;
+                font-size: 0.8rem;
+            }
+            .admin-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            .admin-bar .d-flex {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .hero {
+                padding: 2rem 1rem;
+            }
+            .arabic-hero {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .table {
+                font-size: 0.75rem;
+            }
+            .student-name-input {
+                min-width: 70px;
+                font-size: 0.7rem;
+                padding: 2px 4px;
+            }
+            .mark-input {
+                width: 40px;
+                font-size: 0.7rem;
+                padding: 2px 0;
+            }
+            .exam-tab {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="main-content no-print">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#"><i class="fas fa-mosque me-2"></i> မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန်</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#home">မူလစာမျက်နှာ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#subjects">ဘာသာရပ်များ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#enroll">ကျောင်းအပ်ရန်</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#results">စာမေးပွဲရလဒ်</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- ===== MAIN CONTENT (visible on screen) ===== -->
+    <div class="main-content no-print">
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="arabic-hero">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-        <h1 class="mt-3">မင်္ဂလာပါ 🙏 ကြိုဆိုပါတယ်</h1>
-        <p class="lead"><strong>Madrasah Taleemul Quran</strong> မှ ကုရ်အာန်နှင့် အစ္စလာမ့်ပညာရပ်များ သင်ယူရန် နွေးထွေးစွာ ဖိတ်ခေါ်ပါတယ်။</p>
-    </section>
-
-    <!-- Subjects Section -->
-    <section id="subjects" class="section-card">
-        <h3 class="text-center mb-4" style="color:var(--primary-color);"><i class="fas fa-book-open me-2"></i> အတန်းအလိုက် ဘာသာရပ်များ</h3>
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-6">
-                <label class="form-label fw-bold">📖 အတန်းရွေးပါ</label>
-                <select id="classSelect" class="form-select border-success"></select>
-            </div>
-        </div>
-        <div id="subjectsList"></div>
-    </section>
-
-    <!-- Enroll Section -->
-    <section id="enroll" class="section-card">
-        <h3 class="text-center mb-4" style="color:var(--primary-color);"><i class="fas fa-pen-nib me-2"></i> ကျောင်းအပ်ရန် လျှောက်လွှာ</h3>
-        <form id="enrollForm">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">ကျောင်းသားအမည် *</label>
-                    <input type="text" id="studentName" class="form-control" required>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">ဖခင်အမည် *</label>
-                    <input type="text" id="parentName" class="form-control" required>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">အပ်နှံလိုသောအတန်း *</label>
-                    <select id="className" class="form-select" required></select>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">ဖုန်းနံပါတ် *</label>
-                    <input type="tel" id="phone" class="form-control" required>
-                </div>
-                <div class="col-12 mb-3">
-                    <label class="form-label fw-bold">နေရပ်လိပ်စာ</label>
-                    <textarea id="address" class="form-control" rows="2"></textarea>
+        <!-- ===== NAVBAR ===== -->
+        <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-mosque me-2"></i> မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန်
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="#home"><i class="fas fa-home me-1"></i>မူလ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#subjects"><i class="fas fa-book me-1"></i>ဘာသာရပ်များ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#enroll"><i class="fas fa-pen me-1"></i>ကျောင်းအပ်</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#results"><i class="fas fa-trophy me-1"></i>ရလဒ်</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="text-center">
-                <button type="submit" id="submitBtn" class="btn btn-success px-5 py-2">လျှောက်လွှာတင်မည်</button>
-            </div>
-            <div id="formMessage" class="mt-3"></div>
-        </form>
-    </section>
+        </nav>
 
-    <!-- Results Section -->
-    <section id="results" class="section-card">
-        <h3 class="text-center mb-4" style="color:var(--primary-color);"><i class="fas fa-trophy me-2"></i> စာမေးပွဲရလဒ်များ</h3>
-        
-        <!-- Admin/Control Bar -->
-        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
-            <div class="d-flex gap-3">
-                <div style="min-width:120px;">
-                    <label class="fw-bold small">📅 ခုနှစ်</label>
-                    <select id="yearSelect" class="form-select form-select-sm"></select>
+        <!-- ===== HERO ===== -->
+        <section id="home" class="hero">
+            <div class="arabic-hero">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+            <h1 class="mt-3" style="color:var(--primary-color);">မင်္ဂလာပါ 🙏 ကြိုဆိုပါတယ်</h1>
+            <p class="lead"><strong>Madrasah Taleemul Quran</strong> မှ ကုရ်အာန်နှင့် အစ္စလာမ့်ပညာရပ်များ သင်ယူရန် နွေးထွေးစွာ ဖိတ်ခေါ်ပါတယ်။</p>
+        </section>
+
+        <!-- ===== SUBJECTS ===== -->
+        <section id="subjects" class="section-card">
+            <h3 class="text-center mb-4" style="color:var(--primary-color);">
+                <i class="fas fa-book-open me-2"></i> အတန်းအလိုက် ဘာသာရပ်များ
+            </h3>
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">📖 အတန်းရွေးပါ</label>
+                    <select id="classSelect" class="form-select border-success"></select>
                 </div>
-                <div style="min-width:180px;">
-                    <label class="fw-bold small">🏫 အတန်း</label>
-                    <select id="resultClassSelect" class="form-select form-select-sm">
+            </div>
+            <div id="subjectsList" class="mt-2">
+                <div class="alert alert-info text-center">အတန်းရွေးချယ်ပါ။</div>
+            </div>
+        </section>
+
+        <!-- ===== ENROLL ===== -->
+        <section id="enroll" class="section-card">
+            <h3 class="text-center mb-4" style="color:var(--primary-color);">
+                <i class="fas fa-pen-nib me-2"></i> ကျောင်းအပ်ရန် လျှောက်လွှာ
+            </h3>
+            <form id="enrollForm" class="enroll-form">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">ကျောင်းသားအမည် *</label>
+                        <input type="text" id="studentName" class="form-control" required placeholder="အမည်ထည့်ပါ">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">ဖခင်အမည် *</label>
+                        <input type="text" id="parentName" class="form-control" required placeholder="ဖခင်အမည်">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">အပ်နှံလိုသောအတန်း *</label>
+                        <select id="className" class="form-select" required></select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">ဖုန်းနံပါတ် *</label>
+                        <input type="tel" id="phone" class="form-control" required placeholder="09xxxxxxxx">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-bold">နေရပ်လိပ်စာ</label>
+                        <textarea id="address" class="form-control" rows="2" placeholder="လိပ်စာအပြည့်အစုံ"></textarea>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" id="submitBtn" class="btn btn-success-custom">
+                        <i class="fas fa-paper-plane me-2"></i>လျှောက်လွှာတင်မည်
+                    </button>
+                </div>
+                <div id="formMessage" class="mt-3"></div>
+            </form>
+        </section>
+
+        <!-- ===== RESULTS ===== -->
+        <section id="results" class="section-card">
+            <h3 class="text-center mb-4" style="color:var(--primary-color);">
+                <i class="fas fa-trophy me-2"></i> စာမေးပွဲရလဒ်များ
+            </h3>
+
+            <!-- Admin Bar -->
+            <div class="admin-bar">
+                <div>
+                    <div class="label-sm">📅 ခုနှစ်</div>
+                    <select id="yearSelect"></select>
+                </div>
+                <div>
+                    <div class="label-sm">🏫 အတန်း</div>
+                    <select id="resultClassSelect">
                         <option value="">-- ရွေးပါ --</option>
                     </select>
                 </div>
+                <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
+                    <span id="loginStatus" class="badge bg-secondary px-3 py-2">🔒 Admin မဝင်ရသေး</span>
+                    <button id="loginBtn" class="btn btn-success btn-sm px-3">Login</button>
+                    <button id="logoutBtn" class="btn btn-danger btn-sm px-3 d-none">Logout</button>
+                    <button id="printResultBtn" class="btn btn-primary btn-sm px-3">
+                        <i class="fas fa-print me-1"></i>Print
+                    </button>
+                </div>
             </div>
-            <div class="d-flex align-items-center gap-2">
-                <span id="loginStatus" class="badge bg-secondary">🔒 Admin မဝင်ရသေး</span>
-                <button id="loginBtn" class="btn btn-success btn-sm">Login</button>
-                <button id="logoutBtn" class="btn btn-danger btn-sm d-none">Logout</button>
-                <button id="printResultBtn" class="btn btn-primary btn-sm">🖨️ Print</button>
+
+            <!-- Exam Tabs -->
+            <ul class="nav-tabs-custom" id="examTabs">
+                <li><button class="exam-tab active" data-exam="first">သုံးလပတ် <span class="exam-badge badge-first">1st</span></button></li>
+                <li><button class="exam-tab" data-exam="second">ခြောက်လပတ် <span class="exam-badge badge-second">2nd</span></button></li>
+                <li><button class="exam-tab" data-exam="third">နှစ်ပတ်လည် <span class="exam-badge badge-third">3rd</span></button></li>
+            </ul>
+
+            <!-- Table Container -->
+            <div id="tableContainer" class="table-wrap">
+                <div class="alert alert-info text-center m-3">အတန်းရွေးချယ်ပေးပါ။</div>
             </div>
-        </div>
+        </section>
 
-        <!-- Exam Tabs -->
-        <ul class="nav-tabs-custom">
-            <li><button class="exam-tab active" onclick="switchTab('first')">သုံးလပတ် <span class="exam-badge badge-first">1st</span></button></li>
-            <li><button class="exam-tab" onclick="switchTab('second')">ခြောက်လပတ် <span class="exam-badge badge-second">2nd</span></button></li>
-            <li><button class="exam-tab" onclick="switchTab('third')">နှစ်ပတ်လည် <span class="exam-badge badge-third">3rd</span></button></li>
-        </ul>
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <p>🕌 မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန်<br>
+            <span id="footerYear"></span></p>
+        </footer>
+    </div>
 
-        <div id="tableContainer" class="table-responsive">
-            <div class="alert alert-info text-center">အတန်းရွေးချယ်ပေးပါ။</div>
-        </div>
-    </section>
+    <!-- ===== PRINT AREA (hidden, rendered on print) ===== -->
+    <div id="printArea"></div>
 
-    <footer class="text-center mt-5 mb-4">
-        <p>🕌 မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန်<br>© <span id="footerYear"></span></p>
-    </footer>
-</div>
-
-<!-- Print Area -->
-<div id="printArea"></div>
-
-<!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">Admin Login</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email" value="madrasahtaleemulquran03@gmail.com">
-                <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password">
-                <div id="loginError" class="text-danger small fw-bold"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ပိတ်</button>
-                <button id="confirmLoginBtn" class="btn btn-success">ဝင်ရောက်မည်</button>
+    <!-- ===== LOGIN MODAL ===== -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-lock me-2"></i>Admin Login</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email" value="madrasahtaleemulquran03@gmail.com">
+                    <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password">
+                    <div id="loginError" class="text-danger small fw-bold"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ပိတ်</button>
+                    <button id="confirmLoginBtn" class="btn btn-success">ဝင်ရောက်မည်</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-    (function(){ emailjs.init("user_YOUR_ID_HERE"); })(); // Replace with actual ID if needed
+    <!-- ===== SCRIPTS ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+    </script>
+    <script>
+        (function() {
+            emailjs.init("user_YOUR_ID_HERE"); // Replace with your EmailJS public key
+        })();
 
-    const EXAMS = ['first', 'second', 'third'];
-    const EXAM_NAMES = { first: 'သုံးလပတ်', second: 'ခြောက်လပတ်', third: 'နှစ်ပတ်လည်' };
-    const ROWS = 21;
+        // ============================================================
+        //  DATA
+        // ============================================================
 
-    const subjectsByClass = {
-        1: ["ယစ္စရ်နလ် ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်ခြင်း", "မစ္စနူးန် ဒိုအာ", "ဟဒီးဆ်တော်", "ကုရ်အာနီ ဒိုအာ", "ဂုဏ်တော်များ", "ကလိမဟ်", "အလ်မုဖရ်ရဒါးသ်"],
-        2: ["ယစ္စရ်နလ် ကုရ်အာန်", "ဂုဏ်တော်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "ကလိမဟ်", "ဟဒီးဆ်တော်", "အူရ်ဒူ ကာအေဒဟ်", "မစ္စနှုးန် ဒိုအာ", "အလ်မွဖ်ဖရ်ရဒါးသ်", "ကုရ်အာနီ ဒိုအာ"],
-        3: ["ယစ္စရ်နလ် ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "ဟဒီးဆ်တော်", "မစ္စနှုးန် ဒိုအာ", "ကုရ်အာနီ ဒိုအာ", "ဂုဏ်တော်", "ကလိမဟ်", "အူရ်ဒူ ကာအေဒဟ်", "အလ်မွဖ်ဖရ်ရဒါးသ်"],
-        4: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "ဟဒီးဆ်တော်", "မစ္စနူးန်ဒိုအာ", "ကုရ်အာနီဒိုအာ", "ဂုဏ်တော်", "ကလိမဟ်", "အုရ်ဒူပဟ်လီ", "အလ်မုဖရ်ရဒါးသ်","နမားဇ်နီယသ်"],
-        5: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အစ္စလာမ့်အခြေပြ(အတွဲ၁)", "သအ်လီမုလ်အစ္စလာမ်(အတွဲ၁)", "အစ္စလာမီးအာဒါးဘ်(အတွဲ၁)", "ကျွန်ုပ်တို့၏မြတ်နဗီ", "အုရ်ဒူ ပဟ်လီ", "သအ်လီမုလ်အစ္စလာမ်(အတွဲ၁)အုရ်ဒူ", "အလ်မုဖရ်ရဒါးသ်"],
-        6: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂျ်ဝီးဒ်", "အစ္စလာမ့်အခြေပြ အတွဲ 2", "သအ်လီမုလ်အစ္စလာမ် အတွဲ 2", "အစ္စလာမီအားဒါဘ် အတွဲ 2", "ကျွန်ုပ်တို့မြတ်ရစူလ်", "အခြေခံသမိုင်း", "မစာအေလေနမားဇ်", "အုရ်ဒူ ဒူစရီး", "သအ်လီမုလ်အစ္စလာမ် အုရ်ဒူ", "အလ်မုဖရ်ရဒါးသ်"],
-        7: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အခြေပြ အတွဲ3", "သအ်လီမုလ်အစ္စလာမ် အတွဲ3", "အစ္စလာမီ့အကာအီးဒ်", "တမန်တော်မြတ်၏အတ္ထုပ္ပတ္တိ", "နဗီတမန်တော်များအတ္ထုပ္ပတ္တိ", "ဟမာရေးအီမာန်", "ဟမာရေး နဗီ", "သအ်လီမုလ်အစ္စလာမ် အတွဲ3 အုရ်ဒူ", "အုရ်ဒူ သီစရီး"],
-        8: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အစ္စလာမ့်အခြေပြ အတွဲ4", "သအ်လီမုလ်အစ္စလာမ် အတွဲ4", "တမန်တော်မြတ်အတ္ထုပ္ပတ္တိ", "နဗီတမန်တော်များအကြောင်း", "ကုရ်အာန်ရှင်းလင်းချက်", "ဟာမာရေးရစူလ်", "သအ်လီမုလ်အစ္စလာမ် 4 အုရ်ဒူ", "အစ္စလာမီ့အကာအီးဒ် အုရ်ဒူ", "မစာအေလေနမားဇ် အုရ်ဒူ", "ဒူရူစွလ်လုဂါးသ်", "အုရ်ဒူ ကြောဝ်ထီး"]
-    };
+        const CLASS_NAMES = {
+            1: "မူကြိုတန်း",
+            2: "သူငယ်တန်းလေး",
+            3: "သူငယ်တန်းကြီး",
+            4: "ပထမတန်းလေး",
+            5: "ပထမတန်းကြီး",
+            6: "ဒုတိယတန်း",
+            7: "တတိယတန်း",
+            8: "စတုတ္ထတန်း"
+        };
 
-    const classNames = { 1: "မူကြိုတန်း", 2: "သူငယ်တန်းလေး", 3: "သူငယ်တန်းကြီး", 4: "ပထမတန်းလေး", 5: "ပထမတန်းကြီး", 6: "ဒုတိယတန်း", 7: "တတိယတန်း", 8: "စတုတ္ထတန်း" };
+        const SUBJECTS_BY_CLASS = {
+            1: ["ယစ္စရ်နလ် ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်ခြင်း", "မစ္စနူးန် ဒိုအာ", "ဟဒီးဆ်တော်", "ကုရ်အာနီ ဒိုအာ", "ဂုဏ်တော်များ", "ကလိမဟ်", "အလ်မုဖရ်ရဒါးသ်"],
+            2: ["ယစ္စရ်နလ် ကုရ်အာန်", "ဂုဏ်တော်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "ကလိမဟ်", "ဟဒီးဆ်တော်", "အူရ်ဒူ ကာအေဒဟ်", "မစ္စနှုးန် ဒိုအာ", "အလ်မွဖ်ဖရ်ရဒါးသ်", "ကုရ်အာနီ ဒိုအာ"],
+            3: ["ယစ္စရ်နလ် ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "ဟဒီးဆ်တော်", "မစ္စနှုးန် ဒိုအာ", "ကုရ်အာနီ ဒိုအာ", "ဂုဏ်တော်", "ကလိမဟ်", "အူရ်ဒူ ကာအေဒဟ်", "အလ်မွဖ်ဖရ်ရဒါးသ်"],
+            4: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "ဟဒီးဆ်တော်", "မစ္စနူးန်ဒိုအာ", "ကုရ်အာနီဒိုအာ", "ဂုဏ်တော်", "ကလိမဟ်", "အုရ်ဒူပဟ်လီ", "အလ်မုဖရ်ရဒါးသ်", "နမားဇ်နီယသ်"],
+            5: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အစ္စလာမ့်အခြေပြ(အတွဲ၁)", "သအ်လီမုလ်အစ္စလာမ်(အတွဲ၁)", "အစ္စလာမီးအာဒါးဘ်(အတွဲ၁)", "ကျွန်ုပ်တို့၏မြတ်နဗီ", "အုရ်ဒူ ပဟ်လီ", "သအ်လီမုလ်အစ္စလာမ်(အတွဲ၁)အုရ်ဒူ", "အလ်မုဖရ်ရဒါးသ်"],
+            6: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂျ်ဝီးဒ်", "အစ္စလာမ့်အခြေပြ အတွဲ 2", "သအ်လီမုလ်အစ္စလာမ် အတွဲ 2", "အစ္စလာမီအားဒါဘ် အတွဲ 2", "ကျွန်ုပ်တို့မြတ်ရစူလ်", "အခြေခံသမိုင်း", "မစာအေလေနမားဇ်", "အုရ်ဒူ ဒူစရီး", "သအ်လီမုလ်အစ္စလာမ် အုရ်ဒူ", "အလ်မုဖရ်ရဒါးသ်"],
+            7: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အခြေပြ အတွဲ3", "သအ်လီမုလ်အစ္စလာမ် အတွဲ3", "အစ္စလာမီ့အကာအီးဒ်", "တမန်တော်မြတ်၏အတ္ထုပ္ပတ္တိ", "နဗီတမန်တော်များအတ္ထုပ္ပတ္တိ", "ဟမာရေးအီမာန်", "ဟမာရေး နဗီ", "သအ်လီမုလ်အစ္စလာမ် အတွဲ3 အုရ်ဒူ", "အုရ်ဒူ သီစရီး"],
+            8: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အစ္စလာမ့်အခြေပြ အတွဲ4", "သအ်လီမုလ်အစ္စလာမ် အတွဲ4", "တမန်တော်မြတ်အတ္ထုပ္ပတ္တိ", "နဗီတမန်တော်များအကြောင်း", "ကုရ်အာန်ရှင်းလင်းချက်", "ဟာမာရေးရစူလ်", "သအ်လီမုလ်အစ္စလာမ် 4 အုရ်ဒူ", "အစ္စလာမီ့အကာအီးဒ် အုရ်ဒူ", "မစာအေလေနမားဇ် အုရ်ဒူ", "ဒူရူစွလ်လုဂါးသ်", "အုရ်ဒူ ကြောဝ်ထီး"]
+        };
 
-    const studentNamesByClass = {
-        1: ["မုဟမ္မဒ် မုဆ်သဖာ – ဟဘိဘုလ္လာဟ်", "ရှာ ဝလီယလ္လာဟ် – အဗ္ဒုရ် ရရှိဒ်", "အဟ်ဆာန် – နီစာရ်အဟ်မဒ်", "ဂျူနိဒ် – အဟ်မဒ်", "ဆအိဒ် – ရှမ်ရှီးရ်", "ဘရကတ်အလီ – ရှမ်စွဒ္ဒီးန်", "အဗ္ဒု လ်ခါလိဒ် – အဗ္ဒု ရ်ရဇာ့ခ်", "အဗ်ဒွဆ်ဆုဘဟန် – ဂျမလုဒ္ဒိန်", "အုမရ် – အဗ်ဒုလ်လာဟ်", "စအီဒွလ္လာဟ် - မော်လဝီအမီးန်", "ကဗ်ရှားဟ် ဘီ – ဟနိဖ်", "ဆူဖိယာ ဘီ – အဗ္ဒုရှ်ရှူကိုရ်", "အာဖိယာ ဘီ – အဟ်မဒ်", "အိုင်နဟ် – ရဟ်မသွလ္လာဟ်", "ဆူဖိယာ – အဗ္ဒုလ္လာဟ်", "အာအိရှာ ဘီ – အဗ္ဒုလ္လာဟ်", "ဆူဖိယာ ဘီ – အဗ္ဒု ရ်ရဇာ့ခ်", "ရုဘိနာ ဘီ – ယာစိးန်", "ဝဟိဒဟ် – ဟဖီဇွလ္လာဟ်", "အာအိရှာ ဘီ – အဗ်ဒွရ်ရဟီးမ်", "နစီမဟ်ဘီ – အဗ်ဒုလ်လာဟ်"],
-        2: ["မဟာမဒ် အုစ်မန် — မုဟမ္မဒ် ဘိလာလ်", "အဗ္ဒုရ်ရရှိဒ် — မုဟမ္မဒ် အလီ", "ရိုင်ဟန် — အဗ္ဒုရရဟမန်", "ဖာရုခ် — အဟ်မဒ်", "မုဆ်တဖာ — ဟဘီဘုလ္လဟ်", "ဇိုင်ဒ် — မုဟမ္မဒ် စအိဒ်", "ဆုမိယ ဟ်ဘီ — အဗ္ဒုလ္လာဟ်", "ဟုမိုင်ရဟ် ဘီ — ဟဘီဘုလ္လဟ်", "စာအ်ဒ်ီယ ဟ်ဟီ — အဗ္ဒုလ်ဟမိဒ်", "ရိုမာနဟ် — ယာစီးန်", "ဇိုင်နပ် ဘီ — မုဟမ္မဒ်", "ဖိုအီဇဟ် — ရှမိမ်", "ဂျုဝိုင်ရီယဟ် ဘီ — အဗ္ဒုရ်ှရှကုရ်", "အဆွဂရ် — ရှမ်ရှိရ်", "အဘူဘကရ် — ရှမ်စဒ္ဒိန်"],
-        3: ["အဇဟ်ရ် – အခ်ထာ", "ဆလာဟွဒ္ဒိန် – မဟာမဒ် အယ်လိယာ့ခ်", "မုဆ်သဖာ – ရှေ့ခ် မဟာမဒ်", "တာဟိရဟ် ဘီ – ရဖိက်", "ရှဗနမ် – ဖိုင်ဆလ်", "ရိဟာနာ – ဆိုလိမန်", "ရိရှ်မဟ် – ဆိုလိမန်", "ဖာတိမဟ် – ဆိုလိမန်", "ယာဆမိန် ဘီ – အဗ္ဒုရ် ရဇာ့ခ်", "ဆဖိယာ ဘီ – ဟဆန်", "ဖရဇာနာ – ရဖိက်", "ဆဖိယာ ဘီ – အဟ်မဒ်", "ဆာဂျိဒဟ် ဘီ – အဗ်ဒွလ်ကာဒီရ်", "အိုဝိုယ်စ် – နူးရ်မုဟမ္မဒ်"],
-        4: ["ဟိရှမ် – အယ်လိယာ့စ်", "ဆဖဝန် – အလီ", "ဆိုဖိယန် – မဟ်မုဒ်", "မုဟမ္မဒ် – အဟ်မဒ်", "မုအာဇ် – အဗ္ဒုရ်ရဇာ့ခ်", "ဟမိဒဟ် – ရှာ မုဟမ္မဒ်", "ရိရှမဟ် ဘီ – အဗ္ဒုလ်အဇိဇ်", "ခိုရရှီဒဟ် – ရှဘိရ်", "အွမ်မေ ဆလမဟ် – ရမဇာန် အလီ", "ဖောင်ဇိယာ – ဂျမညလုဒ္ဒိန်"],
-        5: ["ဆအဒ် – ဆအိဒ်", "ယူဆုဖ် – ဟာရှင်မ်", "အိရ်ဖန် – အယ်လိယာ့စ်", "တာဟိရဟ် – အလီ", "ရိစဟ် ဘိဂမ် – အာရိဖ်", "ဟိုမိုင်ရဟ် – ဖာရုခ်", "ဖိရိုဇဟ် – ရှာ မုဟမ္မဒ်", "အိုင်မန် – ဆိုလိုင်မန်", "အနတ်စ် – အဗ္ဒုလ် ဝါဟိဒ်", "ဆအ်ဒ်ီယဟ် – ဟဆန်", "ဟီဒါယဟ် – အဗ္ဒုရ် ရဟိမ်"],
-        6: ["ဆုဟိုင်လ် – အယ်လိယာ့စ်", "ဂျမိလ် – အဗ္ဒုရ်ရဟ်မန်", "အာမီရ် ခန် – အဗ္ဒု ရ်ရဟိမ်", "အဟ်မဒ် – ဟဘိဘုလ္လာဟ်", "ရုမာနာဘီ – အဇိဇ်", "ဟိုမိုင်ရဟ် ဘီ – ဟာရှမ်", "ဆအ်ဒိယာ ဘီ – ဇုဘိုင်ရ်"],
-        7: ["ဆူလ်သွာန် – ဆိုလိုင်မန်", "ရုကီယာ – ရှရီဖ်", "စမရဟ် ဘီ – ရှေ့ခ် မုဟမ္မဒ်", "အာအိရှာ ဘီ – ဟနိဖ်", "မာဂျိဒဟ် ဘီ – နိဆာရ် အဟ်မဒ်", "ဖရ်ဟာနာ ဘီ – ဟာရုန်"],
-        8: ["ဖရ်ဟန် – အဗ္ဒုရ်ရဟ်မန်", "ဘရကတ် – ရဖိက်", "ဆုဟိုင်လ် – အဘူဘကရ်", "အီရ်ဖန် – အလီ", "ဘိလာလ် – ရှရီးဖ်", "အဘူ ဟမ်ဇဟ် – အာရိဖ်", "ဆဖိယာ ဘီ – ဆအိဒ်", "အဖဇလ် – အိဗ်ဒရ်ရဟိမ်"]
-    };
+        const STUDENT_NAMES_BY_CLASS = {
+            1: ["မုဟမ္မဒ် မုဆ်သဖာ – ဟဘိဘုလ္လာဟ်", "ရှာ ဝလီယလ္လာဟ် – အဗ္ဒုရ် ရရှိဒ်", "အဟ်ဆာန် – နီစာရ်အဟ်မဒ်", "ဂျူနိဒ် – အဟ်မဒ်", "ဆအိဒ် – ရှမ်ရှီးရ်", "ဘရကတ်အလီ – ရှမ်စွဒ္ဒီးန်", "အဗ္ဒု လ်ခါလိဒ် – အဗ္ဒု ရ်ရဇာ့ခ်", "အဗ်ဒွဆ်ဆုဘဟန် – ဂျမလုဒ္ဒိန်", "အုမရ် – အဗ်ဒုလ်လာဟ်", "စအီဒွလ္လာဟ် - မော်လဝီအမီးန်", "ကဗ်ရှားဟ် ဘီ – ဟနိဖ်", "ဆူဖိယာ ဘီ – အဗ္ဒုရှ်ရှူကိုရ်", "အာဖိယာ ဘီ – အဟ်မဒ်", "အိုင်နဟ် – ရဟ်မသွလ္လာဟ်", "ဆူဖိယာ – အဗ္ဒုလ္လာဟ်", "အာအိရှာ ဘီ – အဗ္ဒုလ္လာဟ်", "ဆူဖိယာ ဘီ – အဗ္ဒု ရ်ရဇာ့ခ်", "ရုဘိနာ ဘီ – ယာစိးန်", "ဝဟိဒဟ် – ဟဖီဇွလ္လာဟ်", "အာအိရှာ ဘီ – အဗ်ဒွရ်ရဟီးမ်", "နစီမဟ်ဘီ – အဗ်ဒုလ်လာဟ်"],
+            2: ["မဟာမဒ် အုစ်မန် — မုဟမ္မဒ် ဘိလာလ်", "အဗ္ဒုရ်ရရှိဒ် — မုဟမ္မဒ် အလီ", "ရိုင်ဟန် — အဗ္ဒုရရဟမန်", "ဖာရုခ် — အဟ်မဒ်", "မုဆ်တဖာ — ဟဘီဘုလ္လဟ်", "ဇိုင်ဒ် — မုဟမ္မဒ် စအိဒ်", "ဆုမိယ ဟ်ဘီ — အဗ္ဒုလ္လာဟ်", "ဟုမိုင်ရဟ် ဘီ — ဟဘီဘုလ္လဟ်", "စာအ်ဒ်ီယ ဟ်ဟီ — အဗ္ဒုလ်ဟမိဒ်", "ရိုမာနဟ် — ယာစီးန်", "ဇိုင်နပ် ဘီ — မုဟမ္မဒ်", "ဖိုအီဇဟ် — ရှမိမ်", "ဂျုဝိုင်ရီယဟ် ဘီ — အဗ္ဒုရ်ှရှကုရ်", "အဆွဂရ် — ရှမ်ရှိရ်", "အဘူဘကရ် — ရှမ်စဒ္ဒိန်"],
+            3: ["အဇဟ်ရ် – အခ်ထာ", "ဆလာဟွဒ္ဒိန် – မဟာမဒ် အယ်လိယာ့ခ်", "မုဆ်သဖာ – ရှေ့ခ် မဟာမဒ်", "တာဟိရဟ် ဘီ – ရဖိက်", "ရှဗနမ် – ဖိုင်ဆလ်", "ရိဟာနာ – ဆိုလိမန်", "ရိရှ်မဟ် – ဆိုလိမန်", "ဖာတိမဟ် – ဆိုလိမန်", "ယာဆမိန် ဘီ – အဗ္ဒုရ် ရဇာ့ခ်", "ဆဖိယာ ဘီ – ဟဆန်", "ဖရဇာနာ – ရဖိက်", "ဆဖိယာ ဘီ – အဟ်မဒ်", "ဆာဂျိဒဟ် ဘီ – အဗ်ဒွလ်ကာဒီရ်", "အိုဝိုယ်စ် – နူးရ်မုဟမ္မဒ်"],
+            4: ["ဟိရှမ် – အယ်လိယာ့စ်", "ဆဖဝန် – အလီ", "ဆိုဖိယန် – မဟ်မုဒ်", "မုဟမ္မဒ် – အဟ်မဒ်", "မုအာဇ် – အဗ္ဒုရ်ရဇာ့ခ်", "ဟမိဒဟ် – ရှာ မုဟမ္မဒ်", "ရိရှမဟ် ဘီ – အဗ္ဒုလ်အဇိဇ်", "ခိုရရှီဒဟ် – ရှဘိရ်", "အွမ်မေ ဆလမဟ် – ရမဇာန် အလီ", "ဖောင်ဇိယာ – ဂျမညလုဒ္ဒိန်"],
+            5: ["ဆအဒ် – ဆအိဒ်", "ယူဆုဖ် – ဟာရှင်မ်", "အိရ်ဖန် – အယ်လိယာ့စ်", "တာဟိရဟ် – အလီ", "ရိစဟ် ဘိဂမ် – အာရိဖ်", "ဟိုမိုင်ရဟ် – ဖာရုခ်", "ဖိရိုဇဟ် – ရှာ မုဟမ္မဒ်", "အိုင်မန် – ဆိုလိုင်မန်", "အနတ်စ် – အဗ္ဒုလ် ဝါဟိဒ်", "ဆအ်ဒ်ီယဟ် – ဟဆန်", "ဟီဒါယဟ် – အဗ္ဒုရ် ရဟိမ်"],
+            6: ["ဆုဟိုင်လ် – အယ်လိယာ့စ်", "ဂျမိလ် – အဗ္ဒုရ်ရဟ်မန်", "အာမီရ် ခန် – အဗ္ဒု ရ်ရဟိမ်", "အဟ်မဒ် – ဟဘိဘုလ္လာဟ်", "ရုမာနာဘီ – အဇိဇ်", "ဟိုမိုင်ရဟ် ဘီ – ဟာရှမ်", "ဆအ်ဒိယာ ဘီ – ဇုဘိုင်ရ်"],
+            7: ["ဆူလ်သွာန် – ဆိုလိုင်မန်", "ရုကီယာ – ရှရီဖ်", "စမရဟ် ဘီ – ရှေ့ခ် မုဟမ္မဒ်", "အာအိရှာ ဘီ – ဟနိဖ်", "မာဂျိဒဟ် ဘီ – နိဆာရ် အဟ်မဒ်", "ဖရ်ဟာနာ ဘီ – ဟာရုန်"],
+            8: ["ဖရ်ဟန် – အဗ္ဒုရ်ရဟ်မန်", "ဘရကတ် – ရဖိက်", "ဆုဟိုင်လ် – အဘူဘကရ်", "အီရ်ဖန် – အလီ", "ဘိလာလ် – ရှရီးဖ်", "အဘူ ဟမ်ဇဟ် – အာရိဖ်", "ဆဖိယာ ဘီ – ဆအိဒ်", "အဖဇလ် – အိဗ်ဒရ်ရဟိမ်"]
+        };
 
-    let isAdmin = false, currentClass = "", currentYear = new Date().getFullYear(), allData = {}, currentTab = 'first';
+        const EXAMS = ['first', 'second', 'third'];
+        const EXAM_NAMES = { first: 'သုံးလပတ်', second: 'ခြောက်လပတ်', third: 'နှစ်ပတ်လည်' };
+        const ROWS = 21;
 
-    function init() {
-        const yearSelect = document.getElementById("yearSelect");
-        for (let y = currentYear - 5; y <= currentYear + 2; y++) {
-            const opt = document.createElement("option"); opt.value = y; opt.textContent = y + " ခုနှစ်";
-            if (y === currentYear) opt.selected = true;
-            yearSelect.appendChild(opt);
-        }
-        document.getElementById("footerYear").textContent = currentYear;
+        // ============================================================
+        //  STATE
+        // ============================================================
 
-        const selects = ["classSelect", "className", "resultClassSelect"];
-        selects.forEach(sid => {
-            const s = document.getElementById(sid);
-            if (sid === "resultClassSelect") { /* keep default option */ }
-            else { s.innerHTML = '<option value="">-- ရွေးချယ်ပါ --</option>'; }
-            for (let id in classNames) {
-                let opt = document.createElement("option"); opt.value = id; opt.textContent = classNames[id];
-                s.appendChild(opt);
+        let isAdmin = false;
+        let currentYear = new Date().getFullYear();
+        let currentClass = "";
+        let currentTab = 'first';
+        let allData = {};
+
+        // ============================================================
+        //  STORAGE HELPERS
+        // ============================================================
+
+        function loadAllData() {
+            const saved = localStorage.getItem("examResultsData_v3");
+            if (saved) {
+                try { allData = JSON.parse(saved); } catch (e) { allData = {}; }
             }
-        });
+            ensureYearData(currentYear);
+        }
 
-        loadAllData();
-        checkLoginStatus();
-    }
-
-    function loadAllData() {
-        const saved = localStorage.getItem("examResultsData_v3");
-        if (saved) { try { allData = JSON.parse(saved); } catch(e) { allData = {}; } }
-        ensureYearData(currentYear);
-    }
-
-    function ensureYearData(year) {
-        if (!allData[year]) allData[year] = {};
-        for (let c = 1; c <= 8; c++) {
-            if (!allData[year][c]) {
-                allData[year][c] = {};
-                const subsLen = subjectsByClass[c].length;
-                const nameList = studentNamesByClass[c] || [];
-                EXAMS.forEach(exam => {
-                    let studentData = [];
-                    for (let i = 0; i < ROWS; i++) {
-                        studentData.push({ studentName: (i < nameList.length) ? nameList[i] : "", marks: new Array(subsLen).fill("") });
-                    }
-                    allData[year][c][exam] = studentData;
-                });
+        function ensureYearData(year) {
+            if (!allData[year]) allData[year] = {};
+            for (let c = 1; c <= 8; c++) {
+                if (!allData[year][c]) {
+                    allData[year][c] = {};
+                    const subsLen = SUBJECTS_BY_CLASS[c].length;
+                    const nameList = STUDENT_NAMES_BY_CLASS[c] || [];
+                    EXAMS.forEach(exam => {
+                        const studentData = [];
+                        for (let i = 0; i < ROWS; i++) {
+                            studentData.push({
+                                studentName: (i < nameList.length) ? nameList[i] : "",
+                                marks: new Array(subsLen).fill("")
+                            });
+                        }
+                        allData[year][c][exam] = studentData;
+                    });
+                }
             }
+            localStorage.setItem("examResultsData_v3", JSON.stringify(allData));
         }
-        localStorage.setItem("examResultsData_v3", JSON.stringify(allData));
-    }
 
-    function getExamData(year, classId, exam) { ensureYearData(year); return allData[year][classId][exam]; }
-    function saveExamData(year, classId, exam, data) { allData[year][classId][exam] = data; localStorage.setItem("examResultsData_v3", JSON.stringify(allData)); }
-
-    function computeRanks(studentData) {
-        let withTotals = studentData.map((stu, idx) => {
-            let total = 0, count = 0;
-            stu.marks.forEach(m => { let v = parseFloat(m); if (!isNaN(v) && v >= 0) { total += v; count++; } });
-            return { idx, total: count > 0 ? total : -1 };
-        });
-        withTotals.sort((a, b) => b.total - a.total);
-        let ranks = new Array(studentData.length).fill(null), currentRank = 1;
-        for (let i = 0; i < withTotals.length; i++) {
-            if (withTotals[i].total < 0) break;
-            if (i > 0 && withTotals[i].total === withTotals[i - 1].total) ranks[withTotals[i].idx] = currentRank;
-            else { currentRank = i + 1; ranks[withTotals[i].idx] = currentRank; }
+        function getExamData(year, classId, exam) {
+            ensureYearData(year);
+            return allData[year][classId][exam];
         }
-        return ranks;
-    }
 
-    window.switchTab = function(exam) {
-        currentTab = exam;
-        document.querySelectorAll('.exam-tab').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-        renderTable();
-    };
+        function saveExamData(year, classId, exam, data) {
+            allData[year][classId][exam] = data;
+            localStorage.setItem("examResultsData_v3", JSON.stringify(allData));
+        }
 
-    function renderTable() {
-        const container = document.getElementById("tableContainer");
-        if (!currentClass) { container.innerHTML = '<div class="alert alert-info text-center">အတန်းရွေးချယ်ပေးပါ။</div>'; return; }
-        const subjects = subjectsByClass[currentClass], studentData = getExamData(currentYear, currentClass, currentTab), ranks = computeRanks(studentData), disabledAttr = isAdmin ? '' : 'disabled';
-        let html = `<h5 class="text-center mb-3" style="color:var(--secondary-color);">${EXAM_NAMES[currentTab]} စာမေးပွဲရလဒ်</h5><table class="table table-bordered"><thead><tr><th>စဉ်</th><th>ကျောင်းသားအမည်</th>`;
-        subjects.forEach(s => html += `<th>${s}</th>`);
-        html += `<th>စုစုပေါင်း</th><th>အဆင့်</th></tr></thead><tbody>`;
-        studentData.forEach((stu, i) => {
-            let total = 0; stu.marks.forEach(m => { let v = parseFloat(m); if (!isNaN(v)) total += v; });
-            html += `<tr><td>${i + 1}</td><td><input type="text" class="form-control form-control-sm student-name-input" value="${stu.studentName}" onchange="updateName(${i}, this.value)" ${disabledAttr}></td>`;
-            subjects.forEach((s, subIdx) => { html += `<td><input type="number" class="form-control form-control-sm mark-input" value="${stu.marks[subIdx]}" onchange="updateMark(${i}, ${subIdx}, this.value)" ${disabledAttr}></td>`; });
-            html += `<td class="total-cell">${total > 0 ? total.toFixed(1) : "-"}</td><td class="rank-cell">${ranks[i] || "-"}</td></tr>`;
-        });
-        html += `</tbody></table>`;
-        container.innerHTML = html;
-    }
+        // ============================================================
+        //  RANK COMPUTATION
+        // ============================================================
 
-    window.updateName = function(row, val) { let data = getExamData(currentYear, currentClass, currentTab); data[row].studentName = val; saveExamData(currentYear, currentClass, currentTab, data); renderTable(); };
-    window.updateMark = function(row, subIdx, val) { let data = getExamData(currentYear, currentClass, currentTab); let v = val === "" ? "" : parseFloat(val); if (v !== "" && !isNaN(v)) v = Math.min(100, Math.max(0, v)); data[row].marks[subIdx] = v; saveExamData(currentYear, currentClass, currentTab, data); renderTable(); };
-
-    function checkLoginStatus() {
-        isAdmin = sessionStorage.getItem("adminLoggedIn") === "true";
-        const statusSpan = document.getElementById("loginStatus"), loginBtn = document.getElementById("loginBtn"), logoutBtn = document.getElementById("logoutBtn");
-        if (isAdmin) { statusSpan.innerHTML = "✅ Admin"; statusSpan.className = "badge bg-success"; loginBtn.classList.add("d-none"); logoutBtn.classList.remove("d-none"); }
-        else { statusSpan.innerHTML = "🔒 Admin မဝင်ရသေး"; statusSpan.className = "badge bg-secondary"; loginBtn.classList.remove("d-none"); logoutBtn.classList.add("d-none"); }
-        renderTable();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        init();
-        document.getElementById("classSelect").addEventListener("change", (e) => {
-            const cid = e.target.value; const container = document.getElementById("subjectsList");
-            if (!cid) { container.innerHTML = '<div class="alert alert-info">အတန်းရွေးပါ</div>'; return; }
-            container.innerHTML = `<h5 class="text-center">📖 ${classNames[cid]} ဘာသာရပ်များ</h5><div class="list-group">` + subjectsByClass[cid].map(s => `<div class="list-group-item"><i class="fas fa-star-of-life text-success me-2"></i>${s}</div>`).join('') + '</div>';
-        });
-        document.getElementById("yearSelect").addEventListener("change", (e) => { currentYear = parseInt(e.target.value); renderTable(); });
-        document.getElementById("resultClassSelect").addEventListener("change", (e) => { currentClass = e.target.value; renderTable(); });
-        document.getElementById("loginBtn").addEventListener("click", () => { new bootstrap.Modal(document.getElementById('loginModal')).show(); });
-        document.getElementById("logoutBtn").addEventListener("click", () => { sessionStorage.removeItem("adminLoggedIn"); checkLoginStatus(); });
-        document.getElementById("confirmLoginBtn").addEventListener("click", () => {
-            if (document.getElementById("loginEmail").value === "madrasahtaleemulquran03@gmail.com" && document.getElementById("loginPassword").value === "admin123") {
-                sessionStorage.setItem("adminLoggedIn", "true"); bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide(); checkLoginStatus();
-            } else { document.getElementById("loginError").textContent = "❌ အချက်အလက်မှားယွင်းနေပါသည်"; }
-        });
-        document.getElementById("printResultBtn").addEventListener("click", () => {
-            if (!currentClass) { alert("အတန်းအရင်ရွေးချယ်ပေးပါ!"); return; }
-            const subjects = subjectsByClass[currentClass];
-            let html = `<div class="print-header"><h2>မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန်</h2><p>အမှတ်(6)၊ 98လမ်း၊ လွတ်လပ်ရေးရပ်ကွက်၊ မင်္ဂလာတောင်ညွန့်မြို့နယ်</p><h5>${classNames[currentClass]} - ${currentYear} ခုနှစ် စာမေးပွဲရလဒ်</h5></div>`;
-            EXAMS.forEach(exam => {
-                const data = getExamData(currentYear, currentClass, exam), ranks = computeRanks(data);
-                html += `<div class="exam-results-print"><div class="exam-title-print">${EXAM_NAMES[exam]} စာမေးပွဲရလဒ်</div><table class="table"><thead><tr><th>စဉ်</th><th>အမည်</th>`;
-                subjects.forEach(s => html += `<th>${s}</th>`);
-                html += `<th>စုပေါင်း</th><th>အဆင့်</th></tr></thead><tbody>`;
-                data.forEach((stu, i) => {
-                    let total = 0; stu.marks.forEach(m => { let v = parseFloat(m); if (!isNaN(v)) total += v; });
-                    html += `<tr><td>${i + 1}</td><td style="text-align:left">${stu.studentName || "-"}</td>`;
-                    subjects.forEach((s, subIdx) => html += `<td>${stu.marks[subIdx] || "-"}</td>`);
-                    html += `<td>${total > 0 ? total.toFixed(1) : "-"}</td><td>${ranks[i] || "-"}</td></tr>`;
+        function computeRanks(studentData) {
+            const withTotals = studentData.map((stu, idx) => {
+                let total = 0;
+                let count = 0;
+                stu.marks.forEach(m => {
+                    const v = parseFloat(m);
+                    if (!isNaN(v) && v >= 0) { total += v;
+                        count++; }
                 });
-                html += `</tbody></table></div>`;
+                return { idx, total: count > 0 ? total : -1 };
             });
-            document.getElementById("printArea").innerHTML = html; window.print();
+            withTotals.sort((a, b) => b.total - a.total);
+            const ranks = new Array(studentData.length).fill(null);
+            let currentRank = 1;
+            for (let i = 0; i < withTotals.length; i++) {
+                if (withTotals[i].total < 0) break;
+                if (i > 0 && withTotals[i].total === withTotals[i - 1].total) {
+                    ranks[withTotals[i].idx] = currentRank;
+                } else {
+                    currentRank = i + 1;
+                    ranks[withTotals[i].idx] = currentRank;
+                }
+            }
+            return ranks;
+        }
+
+        // ============================================================
+        //  RENDER TABLE
+        // ============================================================
+
+        function renderTable() {
+            const container = document.getElementById("tableContainer");
+            if (!currentClass) {
+                container.innerHTML = '<div class="alert alert-info text-center m-3">အတန်းရွေးချယ်ပေးပါ။</div>';
+                return;
+            }
+
+            const subjects = SUBJECTS_BY_CLASS[currentClass];
+            const studentData = getExamData(currentYear, currentClass, currentTab);
+            const ranks = computeRanks(studentData);
+            const disabledAttr = isAdmin ? '' : 'disabled';
+
+            let html = `
+                <h5 class="text-center mb-3" style="color:var(--secondary-color);">
+                    <i class="fas fa-calendar-alt me-2"></i>${EXAM_NAMES[currentTab]} စာမေးပွဲရလဒ်
+                    <span class="badge bg-secondary ms-2">${currentYear}</span>
+                </h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:45px;">စဉ်</th>
+                                <th style="min-width:180px;">ကျောင်းသားအမည်</th>
+                    `;
+            subjects.forEach(s => { html += `<th>${s}</th>`; });
+            html += `
+                                <th style="width:70px;">စုပေါင်း</th>
+                                <th style="width:60px;">အဆင့်</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
+
+            studentData.forEach((stu, i) => {
+                let total = 0;
+                stu.marks.forEach(m => { const v = parseFloat(m); if (!isNaN(v)) total += v; });
+                const totalDisplay = total > 0 ? total.toFixed(1) : "-";
+
+                html += `<tr>
+                            <td>${i + 1}</td>
+                            <td>
+                                <input type="text" class="student-name-input" value="${stu.studentName}" 
+                                       onchange="updateName(${i}, this.value)" ${disabledAttr}>
+                            </td>
+                        `;
+                subjects.forEach((s, subIdx) => {
+                    const val = stu.marks[subIdx] !== undefined ? stu.marks[subIdx] : "";
+                    html += `
+                                <td>
+                                    <input type="number" class="mark-input" value="${val}" 
+                                           onchange="updateMark(${i}, ${subIdx}, this.value)" 
+                                           min="0" max="100" step="0.5" ${disabledAttr}>
+                                </td>
+                            `;
+                });
+                html += `
+                            <td class="total-cell">${totalDisplay}</td>
+                            <td class="rank-cell">${ranks[i] || "-"}</td>
+                        </tr>
+                    `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-end text-muted small mt-2">
+                    <i class="fas fa-info-circle me-1"></i> အမှတ်များကို 0–100 အတွင်းထည့်ပါ။
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        //  UPDATE CALLBACKS (global for inline onchange)
+        // ============================================================
+
+        window.updateName = function(row, val) {
+            const data = getExamData(currentYear, currentClass, currentTab);
+            data[row].studentName = val;
+            saveExamData(currentYear, currentClass, currentTab, data);
+            renderTable();
+        };
+
+        window.updateMark = function(row, subIdx, val) {
+            const data = getExamData(currentYear, currentClass, currentTab);
+            let v = val === "" ? "" : parseFloat(val);
+            if (v !== "" && !isNaN(v)) {
+                v = Math.min(100, Math.max(0, v));
+            }
+            data[row].marks[subIdx] = v;
+            saveExamData(currentYear, currentClass, currentTab, data);
+            renderTable();
+        };
+
+        // ============================================================
+        //  TAB SWITCHING
+        // ============================================================
+
+        document.querySelectorAll('.exam-tab').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.exam-tab').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTab = this.dataset.exam;
+                renderTable();
+            });
         });
-        document.getElementById("enrollForm").addEventListener("submit", (e) => {
-            e.preventDefault(); const btn = document.getElementById("submitBtn"); btn.disabled = true; btn.innerHTML = '⏳ ပို့နေသည်...';
-            emailjs.send("service_id", "template_id", { 
-                student_name: document.getElementById("studentName").value, 
-                parent_name: document.getElementById("parentName").value, 
-                class_name: classNames[document.getElementById("className").value], 
-                phone: document.getElementById("phone").value, 
-                address: document.getElementById("address").value 
-            }).then(() => { 
-                document.getElementById("formMessage").innerHTML = '<div class="alert alert-success">✅ လျှောက်လွှာတင်ပြီးပါပြီ။</div>'; 
-                document.getElementById("enrollForm").reset(); 
-            }).catch(() => { 
-                document.getElementById("formMessage").innerHTML = '<div class="alert alert-danger">❌ အမှားရှိနေပါသည်။</div>'; 
-            }).finally(() => { btn.disabled = false; btn.innerHTML = 'လျှောက်လွှာတင်မည်'; });
+
+        // ============================================================
+        //  ADMIN LOGIN / LOGOUT
+        // ============================================================
+
+        function checkLoginStatus() {
+            isAdmin = sessionStorage.getItem("adminLoggedIn") === "true";
+            const statusSpan = document.getElementById("loginStatus");
+            const loginBtn = document.getElementById("loginBtn");
+            const logoutBtn = document.getElementById("logoutBtn");
+
+            if (isAdmin) {
+                statusSpan.innerHTML = '✅ Admin';
+                statusSpan.className = 'badge bg-success px-3 py-2';
+                loginBtn.classList.add('d-none');
+                logoutBtn.classList.remove('d-none');
+            } else {
+                statusSpan.innerHTML = '🔒 Admin မဝင်ရသေး';
+                statusSpan.className = 'badge bg-secondary px-3 py-2';
+                loginBtn.classList.remove('d-none');
+                logoutBtn.classList.add('d-none');
+            }
+            renderTable();
+        }
+
+        document.getElementById("loginBtn").addEventListener("click", () => {
+            new bootstrap.Modal(document.getElementById('loginModal')).show();
         });
-    });
-</script>
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            sessionStorage.removeItem("adminLoggedIn");
+            checkLoginStatus();
+        });
+
+        document.getElementById("confirmLoginBtn").addEventListener("click", () => {
+            const email = document.getElementById("loginEmail").value;
+            const pass = document.getElementById("loginPassword").value;
+            if (email === "madrasahtaleemulquran03@gmail.com" && pass === "admin123") {
+                sessionStorage.setItem("adminLoggedIn", "true");
+                bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                document.getElementById("loginError").textContent = "";
+                checkLoginStatus();
+            } else {
+                document.getElementById("loginError").textContent = "❌ အချက်အလက်မှားယွင်းနေပါသည်";
+            }
+        });
+
+        // ============================================================
+        //  PRINT
+        // ============================================================
+
+        document.getElementById("printResultBtn").addEventListener("click", () => {
+            if (!currentClass) {
+                alert("အတန်းအရင်ရွေးချယ်ပေးပါ!");
+                return;
+            }
+
+            const subjects = SUBJECTS_BY_CLASS[currentClass];
+            let html = `
+                <div class="print-header">
+                    <h2>မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန်</h2>
+                    <p>အမှတ်(6)၊ 98လမ်း၊ လွတ်လပ်ရေးရပ်ကွက်၊ မင်္ဂလာတောင်ညွန့်မြို့နယ်</p>
+                    <h5>${CLASS_NAMES[currentClass]} - ${currentYear} ခုနှစ် စာမေးပွဲရလဒ်</h5>
+                </div>
+            `;
+
+            EXAMS.forEach(exam => {
+                const data = getExamData(currentYear, currentClass, exam);
+                const ranks = computeRanks(data);
+                html += `
+                    <div class="exam-results-print">
+                        <div class="exam-title-print">${EXAM_NAMES[exam]} စာမေးပွဲရလဒ်</div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>စဉ်</th>
+                                    <th>အမည်</th>
+                    `;
+                subjects.forEach(s => { html += `<th>${s}</th>`; });
+                html += `
+                                    <th>စုပေါင်း</th>
+                                    <th>အဆင့်</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                data.forEach((stu, i) => {
+                    let total = 0;
+                    stu.marks.forEach(m => { const v = parseFloat(m); if (!isNaN(v)) total += v; });
+                    const totalDisplay = total > 0 ? total.toFixed(1) : "-";
+                    html += `
+                                <tr>
+                                    <td>${i + 1}</td>
+                                    <td style="text-align:left;">${stu.studentName || "-"}</td>
+                        `;
+                    subjects.forEach((s, subIdx) => {
+                        const val = stu.marks[subIdx] !== undefined ? stu.marks[subIdx] : "-";
+                        html += `<td>${val}</td>`;
+                    });
+                    html += `
+                                    <td>${totalDisplay}</td>
+                                    <td>${ranks[i] || "-"}</td>
+                                </tr>
+                            `;
+                });
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+
+            document.getElementById("printArea").innerHTML = html;
+            window.print();
+        });
+
+        // ============================================================
+        //  POPULATE SELECTS
+        // ============================================================
+
+        function populateSelects() {
+            const selects = ["classSelect", "className", "resultClassSelect"];
+            selects.forEach(sid => {
+                const s = document.getElementById(sid);
+                if (sid === "resultClassSelect") {
+                    s.innerHTML = '<option value="">-- ရွေးပါ --</option>';
+                } else {
+                    s.innerHTML = '<option value="">-- ရွေးချယ်ပါ --</option>';
+                }
+                for (let id in CLASS_NAMES) {
+                    const opt = document.createElement("option");
+                    opt.value = id;
+                    opt.textContent = CLASS_NAMES[id];
+                    s.appendChild(opt);
+                }
+            });
+
+            // Year select
+            const yearSelect = document.getElementById("yearSelect");
+            yearSelect.innerHTML = '';
+            for (let y = currentYear - 5; y <= currentYear + 2; y++) {
+                const opt = document.createElement("option");
+                opt.value = y;
+                opt.textContent = y + " ခုနှစ်";
+                if (y === currentYear) opt.selected = true;
+                yearSelect.appendChild(opt);
+            }
+        }
+
+        // ============================================================
+        //  SUBJECTS LIST DYNAMIC
+        // ============================================================
+
+        document.getElementById("classSelect").addEventListener("change", function() {
+            const cid = this.value;
+            const container = document.getElementById("subjectsList");
+            if (!cid) {
+                container.innerHTML = '<div class="alert alert-info text-center">အတန်းရွေးချယ်ပါ။</div>';
+                return;
+            }
+            const subs = SUBJECTS_BY_CLASS[cid] || [];
+            let html = `
+                <h5 class="text-center mb-3" style="color:var(--secondary-color);">
+                    <i class="fas fa-graduation-cap me-2"></i>${CLASS_NAMES[cid]} ဘာသာရပ်များ
+                </h5>
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <div class="list-group list-group-flush border rounded">
+            `;
+            subs.forEach(s => {
+                html += `
+                            <div class="subject-list-item">
+                                <i class="fas fa-star-of-life"></i>
+                                <span>${s}</span>
+                            </div>
+                        `;
+            });
+            html += `
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.innerHTML = html;
+        });
+
+        // ============================================================
+        //  YEAR & CLASS CHANGE
+        // ============================================================
+
+        document.getElementById("yearSelect").addEventListener("change", function() {
+            currentYear = parseInt(this.value);
+            renderTable();
+        });
+
+        document.getElementById("resultClassSelect").addEventListener("change", function() {
+            currentClass = this.value;
+            renderTable();
+        });
+
+        // ============================================================
+        //  ENROLL FORM (EmailJS)
+        // ============================================================
+
+        document.getElementById("enrollForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const btn = document.getElementById("submitBtn");
+            const msg = document.getElementById("formMessage");
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ပို့နေသည်...';
+            msg.innerHTML = '';
+
+            const studentName = document.getElementById("studentName").value.trim();
+            const parentName = document.getElementById("parentName").value.trim();
+            const classVal = document.getElementById("className").value;
+            const phone = document.getElementById("phone").value.trim();
+            const address = document.getElementById("address").value.trim();
+
+            if (!studentName || !parentName || !classVal || !phone) {
+                msg.innerHTML = '<div class="alert alert-danger">❌ လိုအပ်သောအချက်များ ဖြည့်ပါ။</div>';
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>လျှောက်လွှာတင်မည်';
+                return;
+            }
+
+            emailjs.send("service_id", "template_id", {
+                    student_name: studentName,
+                    parent_name: parentName,
+                    class_name: CLASS_NAMES[classVal] || classVal,
+                    phone: phone,
+                    address: address || "မဖော်ပြထား"
+                })
+                .then(() => {
+                    msg.innerHTML = '<div class="alert alert-success">✅ လျှောက်လွှာတင်ပြီးပါပြီ။ ကျေးဇူးတင်ပါတယ်။</div>';
+                    document.getElementById("enrollForm").reset();
+                })
+                .catch(() => {
+                    msg.innerHTML = '<div class="alert alert-danger">❌ ပို့ဆောင်မှု မအောင်မြင်ပါ။ နောက်မှကြိုးစားပါ။</div>';
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>လျှောက်လွှာတင်မည်';
+                });
+        });
+
+        // ============================================================
+        //  FOOTER YEAR
+        // ============================================================
+
+        document.getElementById("footerYear").textContent = new Date().getFullYear();
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+
+        (function init() {
+            populateSelects();
+            loadAllData();
+            checkLoginStatus();
+
+            // Trigger subject list placeholder
+            document.getElementById("subjectsList").innerHTML =
+                '<div class="alert alert-info text-center">အတန်းရွေးချယ်ပါ။</div>';
+
+            // Set default result class to empty
+            document.getElementById("resultClassSelect").value = "";
+        })();
+    </script>
+
 </body>
 </html>
