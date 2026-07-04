@@ -305,20 +305,28 @@
     function loadAllData() {
         const saved = localStorage.getItem("examResultsData_v3");
         if (saved) { try { allData = JSON.parse(saved); } catch(e) { allData = {}; } }
-        ensureYearData(currentYear);
+        // Force rebuild to ensure new subjects appear
+        ensureYearData(currentYear, true);
     }
 
-    function ensureYearData(year) {
+    function ensureYearData(year, forceRebuild = false) {
         if (!allData[year]) allData[year] = {};
         for (let c = 1; c <= 8; c++) {
-            if (!allData[year][c]) {
+            const subsLen = subjectsByClass[c].length;
+            const nameList = studentNamesByClass[c] || [];
+            
+            // If class doesn't exist OR force rebuild OR subject count mismatch
+            if (!allData[year][c] || forceRebuild || allData[year][c][EXAMS[0]]?.length !== ROWS || 
+                (allData[year][c][EXAMS[0]] && allData[year][c][EXAMS[0]][0]?.marks?.length !== subsLen)) {
+                
                 allData[year][c] = {};
-                const subsLen = subjectsByClass[c].length;
-                const nameList = studentNamesByClass[c] || [];
                 EXAMS.forEach(exam => {
                     let studentData = [];
                     for (let i = 0; i < ROWS; i++) {
-                        studentData.push({ studentName: (i < nameList.length) ? nameList[i] : "", marks: new Array(subsLen).fill("") });
+                        studentData.push({ 
+                            studentName: (i < nameList.length) ? nameList[i] : "", 
+                            marks: new Array(subsLen).fill("") 
+                        });
                     }
                     allData[year][c][exam] = studentData;
                 });
