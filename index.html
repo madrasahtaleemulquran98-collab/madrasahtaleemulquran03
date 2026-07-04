@@ -349,10 +349,7 @@
         }
         localStorage.setItem("examResultsData_v3", JSON.stringify(allData));
     }
-<script>
-  localStorage.clear();
-  location.reload();
-</script>
+
     function getExamData(year, classId, exam) { ensureYearData(year); return allData[year][classId][exam]; }
     function saveExamData(year, classId, exam, data) { allData[year][classId][exam] = data; localStorage.setItem("examResultsData_v3", JSON.stringify(allData)); }
 
@@ -461,3 +458,7 @@
 </script>
 </body>
 </html>
+<script>
+  localStorage.clear();
+  location.reload();
+</script>
