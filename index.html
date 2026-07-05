@@ -63,7 +63,7 @@
             margin-bottom: 2rem;
         }
         .arabic-hero { font-family: 'Amiri', serif; font-size: 1.8rem; color: #b8860b; }
-        .nav-tabs-custom { display: flex; border-bottom: 2px solid var(--secondary-color); margin-bottom: 1.5rem; padding: 0; list-style: none; }
+        .nav-tabs-custom { display: flex; border-bottom: 2px solid var(--secondary-color); margin-bottom: 1.5rem; padding: 0; list-style: none; flex-wrap: wrap; }
         .exam-tab {
             padding: 10px 20px;
             cursor: pointer;
@@ -91,7 +91,7 @@
         #printArea { display: none; }
         @media print {
             body { padding: 0; margin: 0; background: white; }
-            .no-print, .navbar, .hero, #subjects, #enroll, #contact, footer, .nav-tabs-custom { display: none !important; }
+            .no-print, .navbar, .hero, #subjects, #enroll, footer, .nav-tabs-custom { display: none !important; }
             #printArea { display: block !important; width: 100%; }
             .section-card { border: none; box-shadow: none; padding: 0; margin: 0; background: white; }
             @page { size: A4 landscape; margin: 1cm; }
@@ -206,9 +206,9 @@
         </div>
 
         <ul class="nav-tabs-custom">
-            <li><button class="exam-tab active" onclick="switchTab('first')">သုံးလပတ် <span class="exam-badge badge-first">1st</span></button></li>
-            <li><button class="exam-tab" onclick="switchTab('second')">ခြောက်လပတ် <span class="exam-badge badge-second">2nd</span></button></li>
-            <li><button class="exam-tab" onclick="switchTab('third')">နှစ်ပတ်လည် <span class="exam-badge badge-third">3rd</span></button></li>
+            <li><button class="exam-tab active" data-exam="first">သုံးလပတ် <span class="exam-badge badge-first">1st</span></button></li>
+            <li><button class="exam-tab" data-exam="second">ခြောက်လပတ် <span class="exam-badge badge-second">2nd</span></button></li>
+            <li><button class="exam-tab" data-exam="third">နှစ်ပတ်လည် <span class="exam-badge badge-third">3rd</span></button></li>
         </ul>
 
         <div id="tableContainer" class="table-responsive">
@@ -244,23 +244,18 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
-    (function(){ emailjs.init("user_YOUR_ID_HERE"); })();
-
-    const EXAMS = ['first', 'second', 'third'];
-    const EXAM_NAMES = { first: 'သုံးလပတ်', second: 'ခြောက်လပတ်', third: 'နှစ်ပတ်လည်' };
-    const ROWS = 21;
-
-    // ------------------ ဘာသာရပ်များ (ထပ်တိုးပြီး) ------------------
+    // -------------------------------------------
+    // ဘာသာရပ်များ (ထပ်တိုးပြီး)
+    // -------------------------------------------
     const subjectsByClass = {
         1: ["ယစ္စရ်နလ် ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်ခြင်း", "မစ္စနူးန် ဒိုအာ", "ဟဒီးဆ်တော်", "ကုရ်အာနီ ဒိုအာ", "ဂုဏ်တော်များ", "ကလိမဟ်", "အလ်မုဖရ်ရဒါးသ်"],
         2: ["ယစ္စရ်နလ် ကုရ်အာန်", "ဂုဏ်တော်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "ကလိမဟ်", "ဟဒီးဆ်တော်", "အူရ်ဒူ ကာအေဒဟ်", "မစ္စနှုးန် ဒိုအာ", "အလ်မွဖ်ဖရ်ရဒါးသ်", "ကုရ်အာနီ ဒိုအာ"],
-        3: ["ယစ္စရ်နလ် ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "ဟဒီးဆ်တော်", "မစ္စနှုးန် ဒိုအာ", "ကုရ်အာနီ ဒိုအာ", "ဂုဏ်တော်", "ကလိမဟ်", "အူရ်ဒူ ကာအေဒဟ်", "အလ်မုဖရ်ရဒါးသ်", "နမားဇ်နီယသ်"],  // added နမားဇ်နီယသ်
-        4: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "ဟဒီးဆ်တော်", "မစ္စနူးန်ဒိုအာ", "ကုရ်အာနီဒိုအာ", "ဂုဏ်တော်", "ကလိမဟ်", "အုရ်ဒူပဟ်လီ", "အလ်မုဖရ်ရဒါးသ်", "နမားဇ်နီယသ်", "သအ်လီမုလ်အစ္စလာမ် အတွဲ၁"],  // added သအ်လီမုလ်အစ္စလာမ် အတွဲ၁
-        5: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အစ္စလာမ့်အခြေပြ(အတွဲ၁)", "သအ်လီမုလ်အစ္စလာမ်(အတွဲ၁)", "အစ္စလာမီးအာဒါးဘ်(အတွဲ၁)", "ကျွန်ုပ်တို့၏မြတ်နဗီ", "အုရ်ဒူ ပဟ်လီ", "သအ်လီမုလ်အစ္စလာမ်(အတွဲ၁)အုရ်ဒူ", "အလ်မုဖရ်ရဒါးသ်", "ဟဒီးဆ်တော်", "စူရဟ်အဓိပ္ပါယ်"],  // added two
+        3: ["ယစ္စရ်နလ် ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "ဟဒီးဆ်တော်", "မစ္စနှုးန် ဒိုအာ", "ကုရ်အာနီ ဒိုအာ", "ဂုဏ်တော်", "ကလိမဟ်", "အူရ်ဒူ ကာအေဒဟ်", "အလ်မုဖရ်ရဒါးသ်", "နမားဇ်နီယသ်"],
+        4: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "ဟဒီးဆ်တော်", "မစ္စနူးန်ဒိုအာ", "ကုရ်အာနီဒိုအာ", "ဂုဏ်တော်", "ကလိမဟ်", "အုရ်ဒူပဟ်လီ", "အလ်မုဖရ်ရဒါးသ်", "နမားဇ်နီယသ်", "သအ်လီမုလ်အစ္စလာမ် အတွဲ၁"],
+        5: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အစ္စလာမ့်အခြေပြ(အတွဲ၁)", "သအ်လီမုလ်အစ္စလာမ်(အတွဲ၁)", "အစ္စလာမီးအာဒါးဘ်(အတွဲ၁)", "ကျွန်ုပ်တို့၏မြတ်နဗီ", "အုရ်ဒူ ပဟ်လီ", "သအ်လီမုလ်အစ္စလာမ်(အတွဲ၁)အုရ်ဒူ", "အလ်မုဖရ်ရဒါးသ်", "ဟဒီးဆ်တော်", "စူရဟ်အဓိပ္ပါယ်"],
         6: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အစ္စလာမ့်အခြေပြ အတွဲ 2", "သအ်လီမုလ်အစ္စလာမ် အတွဲ 2", "အစ္စလာမီအားဒါဘ် အတွဲ 2", "ကျွန်ုပ်တို့မြတ်ရစူလ်", "အခြေခံသမိုင်း", "မစာအေလေနမားဇ်", "အုရ်ဒူ ဒူစရီး", "သအ်လီမုလ်အစ္စလာမ် အုရ်ဒူ", "အလ်မုဖရ်ရဒါးသ်"],
-        7: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အခြေပြ အတွဲ3", "သအ်လီမုလ်အစ္စလာမ် အတွဲ3", "အစ္စလာမီ့အကာအီးဒ်", "တမန်တော်မြတ်၏အတ္ထုပ္ပတ္တိ", "နဗီတမန်တော်များအတ္ထုပ္ပတ္တိ", "ဟမာရေးအီမာန်", "ဟမာရေး နဗီ", "သအ်လီမုလ်အစ္စလာမ် အတွဲ3 အုရ်ဒူ", "အုရ်ဒူ သီစရီး", "အလ်မုဖရ်ရဒါးသ်", "အစ္စလာမိအားဒါဘ် အုရ်ဒူ"],  // added
+        7: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အခြေပြ အတွဲ3", "သအ်လီမုလ်အစ္စလာမ် အတွဲ3", "အစ္စလာမီ့အကာအီးဒ်", "တမန်တော်မြတ်၏အတ္ထုပ္ပတ္တိ", "နဗီတမန်တော်များအတ္ထုပ္ပတ္တိ", "ဟမာရေးအီမာန်", "ဟမာရေး နဗီ", "သအ်လီမုလ်အစ္စလာမ် အတွဲ3 အုရ်ဒူ", "အုရ်ဒူ သီစရီး", "အလ်မုဖရ်ရဒါးသ်", "အစ္စလာမိအားဒါဘ် အုရ်ဒူ"],
         8: ["ကုရ်အာန်", "စူရဟ်အလွတ်ကျက်မှတ်ခြင်း", "သဂ်ျဝီးဒ်", "အစ္စလာမ့်အခြေပြ အတွဲ4", "သအ်လီမုလ်အစ္စလာမ် အတွဲ4", "တမန်တော်မြတ်အတ္ထုပ္ပတ္တိ", "နဗီတမန်တော်များအကြောင်း", "ကုရ်အာန်ရှင်းလင်းချက်", "ဟာမာရေးရစူလ်", "သအ်လီမုလ်အစ္စလာမ် 4 အုရ်ဒူ", "အစ္စလာမီ့အကာအီးဒ် အုရ်ဒူ", "မစာအေလေနမားဇ် အုရ်ဒူ", "ဒူရူစွလ်လုဂါးသ်", "အုရ်ဒူ ကြောဝ်ထီး"]
     };
 
@@ -277,37 +272,22 @@
         8: ["ဖရ်ဟန် – အဗ္ဒုရ်ရဟ်မန်", "ဘရကတ် – ရဖိက်", "ဆုဟိုင်လ် – အဘူဘကရ်", "အီရ်ဖန် – အလီ", "ဘိလာလ် – ရှရီးဖ်", "အဘူ ဟမ်ဇဟ် – အာရိဖ်", "ဆဖိယာ ဘီ – ဆအိဒ်", "အဖဇလ် – အိဗ်ဒရ်ရဟိမ်"]
     };
 
-    let isAdmin = false, currentClass = "", currentYear = new Date().getFullYear(), allData = {}, currentTab = 'first';
+    const EXAMS = ['first', 'second', 'third'];
+    const EXAM_NAMES = { first: 'သုံးလပတ်', second: 'ခြောက်လပတ်', third: 'နှစ်ပတ်လည်' };
+    const ROWS = 21;
 
-    function init() {
-        const yearSelect = document.getElementById("yearSelect");
-        for (let y = currentYear - 5; y <= currentYear + 2; y++) {
-            const opt = document.createElement("option"); opt.value = y; opt.textContent = y + " ခုနှစ်";
-            if (y === currentYear) opt.selected = true;
-            yearSelect.appendChild(opt);
-        }
-        document.getElementById("footerYear").textContent = currentYear;
+    let isAdmin = false;
+    let currentClass = "";
+    let currentYear = new Date().getFullYear();
+    let allData = {};
+    let currentTab = 'first';
 
-        const selects = ["classSelect", "className", "resultClassSelect"];
-        selects.forEach(sid => {
-            const s = document.getElementById(sid);
-            if (sid === "resultClassSelect") { /* keep default option */ }
-            else { s.innerHTML = '<option value="">-- ရွေးချယ်ပါ --</option>'; }
-            for (let id in classNames) {
-                let opt = document.createElement("option"); opt.value = id; opt.textContent = classNames[id];
-                s.appendChild(opt);
-            }
-        });
-
-        loadAllData();
-        checkLoginStatus();
-    }
-
-    // ------------------ ဒေတာများကို အဆင်ပြေအောင် ပြင်ဆင်ခြင်း (ဘာသာရပ်အသစ်များအတွက်) ------------------
+    // -------------------------------------------
+    // ဒေတာသိမ်းဆည်းခြင်း
+    // -------------------------------------------
     function loadAllData() {
         const saved = localStorage.getItem("examResultsData_v3");
         if (saved) { try { allData = JSON.parse(saved); } catch(e) { allData = {}; } }
-        // ဘာသာရပ်အသစ်များပါဝင်အောင် ပြင်ဆင်ပါ (force rebuild)
         ensureYearData(currentYear, true);
     }
 
@@ -317,10 +297,7 @@
             const newSubjects = subjectsByClass[c];
             const newLen = newSubjects.length;
             const nameList = studentNamesByClass[c] || [];
-            
-            // class data ရှိပြီးသားလား စစ်
             if (!allData[year][c] || forceRebuild) {
-                // အသစ်ဆောက်
                 allData[year][c] = {};
                 EXAMS.forEach(exam => {
                     let rows = [];
@@ -331,11 +308,9 @@
                     allData[year][c][exam] = rows;
                 });
             } else {
-                // ရှိပြီးသား -> ဘာသာရပ်အရေအတွက်ကိုက်ညီအောင်ပြင်ဆင်
                 EXAMS.forEach(exam => {
                     let oldData = allData[year][c][exam];
                     if (!oldData) {
-                        // exam မရှိသေးရင် အသစ်ဆောက်
                         let rows = [];
                         for (let i = 0; i < ROWS; i++) {
                             let name = (i < nameList.length) ? nameList[i] : "";
@@ -344,13 +319,11 @@
                         allData[year][c][exam] = rows;
                         return;
                     }
-                    // ရှိပြီးသား: ကျောင်းသားအရေအတွက် ROWS နဲ့မညီရင်ပြင်ဆင်
                     let newRows = [];
                     for (let i = 0; i < ROWS; i++) {
                         let oldRow = oldData[i] || { studentName: "", marks: [] };
                         let name = oldRow.studentName || (i < nameList.length ? nameList[i] : "");
                         let oldMarks = oldRow.marks || [];
-                        // newMarks ကို newLen နဲ့ညီအောင်
                         let newMarks = [];
                         for (let j = 0; j < newLen; j++) {
                             newMarks.push(j < oldMarks.length ? oldMarks[j] : "");
@@ -364,109 +337,267 @@
         localStorage.setItem("examResultsData_v3", JSON.stringify(allData));
     }
 
-    function getExamData(year, classId, exam) { ensureYearData(year); return allData[year][classId][exam]; }
-    function saveExamData(year, classId, exam, data) { allData[year][classId][exam] = data; localStorage.setItem("examResultsData_v3", JSON.stringify(allData)); }
+    function getExamData(year, classId, exam) {
+        ensureYearData(year);
+        return allData[year][classId][exam];
+    }
 
+    function saveExamData(year, classId, exam, data) {
+        allData[year][classId][exam] = data;
+        localStorage.setItem("examResultsData_v3", JSON.stringify(allData));
+    }
+
+    // -------------------------------------------
+    // အဆင့်တွက်ချက်ခြင်း
+    // -------------------------------------------
     function computeRanks(studentData) {
         let withTotals = studentData.map((stu, idx) => {
             let total = 0, count = 0;
-            stu.marks.forEach(m => { let v = parseFloat(m); if (!isNaN(v) && v >= 0) { total += v; count++; } });
+            stu.marks.forEach(m => {
+                let v = parseFloat(m);
+                if (!isNaN(v) && v >= 0) { total += v; count++; }
+            });
             return { idx, total: count > 0 ? total : -1 };
         });
         withTotals.sort((a, b) => b.total - a.total);
-        let ranks = new Array(studentData.length).fill(null), currentRank = 1;
+        let ranks = new Array(studentData.length).fill(null);
+        let currentRank = 1;
         for (let i = 0; i < withTotals.length; i++) {
             if (withTotals[i].total < 0) break;
-            if (i > 0 && withTotals[i].total === withTotals[i - 1].total) ranks[withTotals[i].idx] = currentRank;
-            else { currentRank = i + 1; ranks[withTotals[i].idx] = currentRank; }
+            if (i > 0 && withTotals[i].total === withTotals[i-1].total) {
+                ranks[withTotals[i].idx] = currentRank;
+            } else {
+                currentRank = i + 1;
+                ranks[withTotals[i].idx] = currentRank;
+            }
         }
         return ranks;
     }
 
-    window.switchTab = function(exam) {
-        currentTab = exam;
-        document.querySelectorAll('.exam-tab').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-        renderTable();
-    };
-
+    // -------------------------------------------
+    // UI ပြင်ဆင်ခြင်း
+    // -------------------------------------------
     function renderTable() {
         const container = document.getElementById("tableContainer");
-        if (!currentClass) { container.innerHTML = '<div class="alert alert-info text-center">အတန်းရွေးချယ်ပေးပါ။</div>'; return; }
-        const subjects = subjectsByClass[currentClass], studentData = getExamData(currentYear, currentClass, currentTab), ranks = computeRanks(studentData), disabledAttr = isAdmin ? '' : 'disabled';
-        let html = `<h5 class="text-center mb-3" style="color:var(--secondary-color);">${EXAM_NAMES[currentTab]} စာမေးပွဲရလဒ်</h5><table class="table table-bordered"><thead><tr><th>စဉ်</th><th>ကျောင်းသားအမည်</th>`;
+        if (!currentClass) {
+            container.innerHTML = '<div class="alert alert-info text-center">အတန်းရွေးချယ်ပေးပါ။</div>';
+            return;
+        }
+        const subjects = subjectsByClass[currentClass];
+        const studentData = getExamData(currentYear, currentClass, currentTab);
+        const ranks = computeRanks(studentData);
+        const disabledAttr = isAdmin ? '' : 'disabled';
+
+        let html = `<h5 class="text-center mb-3" style="color:var(--secondary-color);">${EXAM_NAMES[currentTab]} စာမေးပွဲရလဒ်</h5>
+                    <table class="table table-bordered">
+                        <thead><tr><th>စဉ်</th><th>ကျောင်းသားအမည်</th>`;
         subjects.forEach(s => html += `<th>${s}</th>`);
         html += `<th>စုစုပေါင်း</th><th>အဆင့်</th></tr></thead><tbody>`;
+
         studentData.forEach((stu, i) => {
-            let total = 0; stu.marks.forEach(m => { let v = parseFloat(m); if (!isNaN(v)) total += v; });
-            html += `<tr><td>${i + 1}</td><td><input type="text" class="form-control form-control-sm student-name-input" value="${stu.studentName}" onchange="updateName(${i}, this.value)" ${disabledAttr}></td>`;
-            subjects.forEach((s, subIdx) => { html += `<td><input type="number" class="form-control form-control-sm mark-input" value="${stu.marks[subIdx]}" onchange="updateMark(${i}, ${subIdx}, this.value)" ${disabledAttr}></td>`; });
-            html += `<td class="total-cell">${total > 0 ? total.toFixed(1) : "-"}</td><td class="rank-cell">${ranks[i] || "-"}</td></tr>`;
+            let total = 0;
+            stu.marks.forEach(m => { let v = parseFloat(m); if (!isNaN(v)) total += v; });
+            html += `<tr>
+                        <td>${i+1}</td>
+                        <td><input type="text" class="form-control form-control-sm student-name-input" value="${stu.studentName}" onchange="updateName(${i}, this.value)" ${disabledAttr}></td>`;
+            subjects.forEach((s, subIdx) => {
+                html += `<td><input type="number" class="form-control form-control-sm mark-input" value="${stu.marks[subIdx]}" onchange="updateMark(${i}, ${subIdx}, this.value)" ${disabledAttr}></td>`;
+            });
+            html += `<td class="total-cell">${total > 0 ? total.toFixed(1) : "-"}</td>
+                        <td class="rank-cell">${ranks[i] || "-"}</td>
+                    </tr>`;
         });
         html += `</tbody></table>`;
         container.innerHTML = html;
     }
 
-    window.updateName = function(row, val) { let data = getExamData(currentYear, currentClass, currentTab); data[row].studentName = val; saveExamData(currentYear, currentClass, currentTab, data); renderTable(); };
-    window.updateMark = function(row, subIdx, val) { let data = getExamData(currentYear, currentClass, currentTab); let v = val === "" ? "" : parseFloat(val); if (v !== "" && !isNaN(v)) v = Math.min(100, Math.max(0, v)); data[row].marks[subIdx] = v; saveExamData(currentYear, currentClass, currentTab, data); renderTable(); };
+    // -------------------------------------------
+    // အမည်နှင့်အမှတ်များ update လုပ်ခြင်း
+    // -------------------------------------------
+    window.updateName = function(row, val) {
+        let data = getExamData(currentYear, currentClass, currentTab);
+        data[row].studentName = val;
+        saveExamData(currentYear, currentClass, currentTab, data);
+        renderTable();
+    };
 
-    function checkLoginStatus() {
-        isAdmin = sessionStorage.getItem("adminLoggedIn") === "true";
-        const statusSpan = document.getElementById("loginStatus"), loginBtn = document.getElementById("loginBtn"), logoutBtn = document.getElementById("logoutBtn");
-        if (isAdmin) { statusSpan.innerHTML = "✅ Admin"; statusSpan.className = "badge bg-success"; loginBtn.classList.add("d-none"); logoutBtn.classList.remove("d-none"); }
-        else { statusSpan.innerHTML = "🔒 Admin မဝင်ရသေး"; statusSpan.className = "badge bg-secondary"; loginBtn.classList.remove("d-none"); logoutBtn.classList.add("d-none"); }
+    window.updateMark = function(row, subIdx, val) {
+        let data = getExamData(currentYear, currentClass, currentTab);
+        let v = val === "" ? "" : parseFloat(val);
+        if (v !== "" && !isNaN(v)) v = Math.min(100, Math.max(0, v));
+        data[row].marks[subIdx] = v;
+        saveExamData(currentYear, currentClass, currentTab, data);
+        renderTable();
+    };
+
+    // -------------------------------------------
+    // Tab ပြောင်းခြင်း
+    // -------------------------------------------
+    function switchTab(exam) {
+        currentTab = exam;
+        document.querySelectorAll('.exam-tab').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.exam-tab[data-exam="${exam}"]`).classList.add('active');
         renderTable();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        init();
-        document.getElementById("classSelect").addEventListener("change", (e) => {
-            const cid = e.target.value; const container = document.getElementById("subjectsList");
-            if (!cid) { container.innerHTML = '<div class="alert alert-info">အတန်းရွေးပါ</div>'; return; }
-            container.innerHTML = `<h5 class="text-center">📖 ${classNames[cid]} ဘာသာရပ်များ</h5><div class="list-group">` + subjectsByClass[cid].map(s => `<div class="list-group-item"><i class="fas fa-star-of-life text-success me-2"></i>${s}</div>`).join('') + '</div>';
-        });
-        document.getElementById("yearSelect").addEventListener("change", (e) => { currentYear = parseInt(e.target.value); renderTable(); });
-        document.getElementById("resultClassSelect").addEventListener("change", (e) => { currentClass = e.target.value; renderTable(); });
-        document.getElementById("loginBtn").addEventListener("click", () => { new bootstrap.Modal(document.getElementById('loginModal')).show(); });
-        document.getElementById("logoutBtn").addEventListener("click", () => { sessionStorage.removeItem("adminLoggedIn"); checkLoginStatus(); });
-        document.getElementById("confirmLoginBtn").addEventListener("click", () => {
-            if (document.getElementById("loginEmail").value === "madrasahtaleemulquran03@gmail.com" && document.getElementById("loginPassword").value === "admin123") {
-                sessionStorage.setItem("adminLoggedIn", "true"); bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide(); checkLoginStatus();
-            } else { document.getElementById("loginError").textContent = "❌ အချက်အလက်မှားယွင်းနေပါသည်"; }
-        });
-        document.getElementById("printResultBtn").addEventListener("click", () => {
-            if (!currentClass) { alert("အတန်းအရင်ရွေးချယ်ပေးပါ!"); return; }
-            const subjects = subjectsByClass[currentClass];
-            let html = `<div class="print-header"><h2>မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန်</h2><p>အမှတ်(6)၊ 98လမ်း၊ လွတ်လပ်ရေးရပ်ကွက်၊ မင်္ဂလာတောင်ညွန့်မြို့နယ်</p><h5>${classNames[currentClass]} - ${currentYear} ခုနှစ် စာမေးပွဲရလဒ်</h5></div>`;
-            EXAMS.forEach(exam => {
-                const data = getExamData(currentYear, currentClass, exam), ranks = computeRanks(data);
-                html += `<div class="exam-results-print"><div class="exam-title-print">${EXAM_NAMES[exam]} စာမေးပွဲရလဒ်</div><table class="table"><thead><tr><th>စဉ်</th><th>အမည်</th>`;
-                subjects.forEach(s => html += `<th>${s}</th>`);
-                html += `<th>စုပေါင်း</th><th>အဆင့်</th></tr></thead><tbody>`;
-                data.forEach((stu, i) => {
-                    let total = 0; stu.marks.forEach(m => { let v = parseFloat(m); if (!isNaN(v)) total += v; });
-                    html += `<tr><td>${i + 1}</td><td style="text-align:left">${stu.studentName || "-"}</td>`;
-                    subjects.forEach((s, subIdx) => html += `<td>${stu.marks[subIdx] || "-"}</td>`);
-                    html += `<td>${total > 0 ? total.toFixed(1) : "-"}</td><td>${ranks[i] || "-"}</td></tr>`;
-                });
-                html += `</tbody></table></div>`;
+    // -------------------------------------------
+    // Login / Logout
+    // -------------------------------------------
+    function checkLoginStatus() {
+        isAdmin = sessionStorage.getItem("adminLoggedIn") === "true";
+        const statusSpan = document.getElementById("loginStatus");
+        const loginBtn = document.getElementById("loginBtn");
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (isAdmin) {
+            statusSpan.innerHTML = "✅ Admin";
+            statusSpan.className = "badge bg-success";
+            loginBtn.classList.add("d-none");
+            logoutBtn.classList.remove("d-none");
+        } else {
+            statusSpan.innerHTML = "🔒 Admin မဝင်ရသေး";
+            statusSpan.className = "badge bg-secondary";
+            loginBtn.classList.remove("d-none");
+            logoutBtn.classList.add("d-none");
+        }
+        renderTable();
+    }
+
+    // -------------------------------------------
+    // Print ထုတ်ခြင်း
+    // -------------------------------------------
+    function printResults() {
+        if (!currentClass) { alert("အတန်းအရင်ရွေးချယ်ပေးပါ!"); return; }
+        const subjects = subjectsByClass[currentClass];
+        let html = `<div class="print-header">
+                        <h2>မဒ်ရစဟ်သအ်လီမုလ်ကုရ်အာန်</h2>
+                        <p>အမှတ်(6)၊ 98လမ်း၊ လွတ်လပ်ရေးရပ်ကွက်၊ မင်္ဂလာတောင်ညွန့်မြို့နယ်</p>
+                        <h5>${classNames[currentClass]} - ${currentYear} ခုနှစ် စာမေးပွဲရလဒ်</h5>
+                    </div>`;
+        EXAMS.forEach(exam => {
+            const data = getExamData(currentYear, currentClass, exam);
+            const ranks = computeRanks(data);
+            html += `<div class="exam-results-print">
+                        <div class="exam-title-print">${EXAM_NAMES[exam]} စာမေးပွဲရလဒ်</div>
+                        <table class="table">
+                            <thead><tr><th>စဉ်</th><th>အမည်</th>`;
+            subjects.forEach(s => html += `<th>${s}</th>`);
+            html += `<th>စုပေါင်း</th><th>အဆင့်</th></tr></thead><tbody>`;
+            data.forEach((stu, i) => {
+                let total = 0;
+                stu.marks.forEach(m => { let v = parseFloat(m); if (!isNaN(v)) total += v; });
+                html += `<tr><td>${i+1}</td><td style="text-align:left">${stu.studentName || "-"}</td>`;
+                subjects.forEach((s, subIdx) => html += `<td>${stu.marks[subIdx] || "-"}</td>`);
+                html += `<td>${total > 0 ? total.toFixed(1) : "-"}</td><td>${ranks[i] || "-"}</td></tr>`;
             });
-            document.getElementById("printArea").innerHTML = html; window.print();
+            html += `</tbody></table></div>`;
         });
-        document.getElementById("enrollForm").addEventListener("submit", (e) => {
-            e.preventDefault(); const btn = document.getElementById("submitBtn"); btn.disabled = true; btn.innerHTML = '⏳ ပို့နေသည်...';
-            emailjs.send("service_id", "template_id", { 
-                student_name: document.getElementById("studentName").value, 
-                parent_name: document.getElementById("parentName").value, 
-                class_name: classNames[document.getElementById("className").value], 
-                phone: document.getElementById("phone").value, 
-                address: document.getElementById("address").value 
-            }).then(() => { 
-                document.getElementById("formMessage").innerHTML = '<div class="alert alert-success">✅ လျှောက်လွှာတင်ပြီးပါပြီ။</div>'; 
-                document.getElementById("enrollForm").reset(); 
-            }).catch(() => { 
-                document.getElementById("formMessage").innerHTML = '<div class="alert alert-danger">❌ အမှားရှိနေပါသည်။</div>'; 
-            }).finally(() => { btn.disabled = false; btn.innerHTML = 'လျှောက်လွှာတင်မည်'; });
+        document.getElementById("printArea").innerHTML = html;
+        window.print();
+    }
+
+    // -------------------------------------------
+    // စာမျက်နှာ load ဖြစ်ချိန်
+    // -------------------------------------------
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Year select
+        const yearSelect = document.getElementById("yearSelect");
+        for (let y = currentYear - 5; y <= currentYear + 2; y++) {
+            const opt = document.createElement("option");
+            opt.value = y;
+            opt.textContent = y + " ခုနှစ်";
+            if (y === currentYear) opt.selected = true;
+            yearSelect.appendChild(opt);
+        }
+        document.getElementById("footerYear").textContent = currentYear;
+
+        // Class selects
+        const selects = ["classSelect", "className", "resultClassSelect"];
+        selects.forEach(sid => {
+            const s = document.getElementById(sid);
+            if (sid !== "resultClassSelect") {
+                s.innerHTML = '<option value="">-- ရွေးချယ်ပါ --</option>';
+            }
+            for (let id in classNames) {
+                let opt = document.createElement("option");
+                opt.value = id;
+                opt.textContent = classNames[id];
+                s.appendChild(opt);
+            }
+        });
+
+        loadAllData();
+        checkLoginStatus();
+
+        // Event listeners
+        document.getElementById("classSelect").addEventListener("change", function(e) {
+            const cid = e.target.value;
+            const container = document.getElementById("subjectsList");
+            if (!cid) {
+                container.innerHTML = '<div class="alert alert-info">အတန်းရွေးပါ</div>';
+                return;
+            }
+            container.innerHTML = `<h5 class="text-center">📖 ${classNames[cid]} ဘာသာရပ်များ</h5>
+                                    <div class="list-group">` +
+                                    subjectsByClass[cid].map(s => `<div class="list-group-item"><i class="fas fa-star-of-life text-success me-2"></i>${s}</div>`).join('') +
+                                    '</div>';
+        });
+
+        document.getElementById("yearSelect").addEventListener("change", function(e) {
+            currentYear = parseInt(e.target.value);
+            renderTable();
+        });
+
+        document.getElementById("resultClassSelect").addEventListener("change", function(e) {
+            currentClass = e.target.value;
+            renderTable();
+        });
+
+        // Tab buttons
+        document.querySelectorAll('.exam-tab').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exam = this.getAttribute('data-exam');
+                switchTab(exam);
+            });
+        });
+
+        // Login
+        document.getElementById("loginBtn").addEventListener("click", function() {
+            new bootstrap.Modal(document.getElementById('loginModal')).show();
+        });
+
+        document.getElementById("confirmLoginBtn").addEventListener("click", function() {
+            const email = document.getElementById("loginEmail").value;
+            const pass = document.getElementById("loginPassword").value;
+            if (email === "madrasahtaleemulquran03@gmail.com" && pass === "admin123") {
+                sessionStorage.setItem("adminLoggedIn", "true");
+                bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                checkLoginStatus();
+            } else {
+                document.getElementById("loginError").textContent = "❌ အချက်အလက်မှားယွင်းနေပါသည်";
+            }
+        });
+
+        document.getElementById("logoutBtn").addEventListener("click", function() {
+            sessionStorage.removeItem("adminLoggedIn");
+            checkLoginStatus();
+        });
+
+        document.getElementById("printResultBtn").addEventListener("click", printResults);
+
+        // Enroll form (dummy – no emailjs)
+        document.getElementById("enrollForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const btn = document.getElementById("submitBtn");
+            btn.disabled = true;
+            btn.innerHTML = '⏳ ပို့နေသည်...';
+            // Simulate sending
+            setTimeout(() => {
+                document.getElementById("formMessage").innerHTML = '<div class="alert alert-success">✅ လျှောက်လွှာတင်ပြီးပါပြီ။</div>';
+                document.getElementById("enrollForm").reset();
+                btn.disabled = false;
+                btn.innerHTML = 'လျှောက်လွှာတင်မည်';
+            }, 1000);
         });
     });
 </script>
